@@ -1,0 +1,35 @@
+6, Albarán o Factura de Abono,ABONO,v02
+21, Albarán pedido us fin a operador logístico/Alb entrega op ,ALBLOG,v01
+19, Cambios de precio,CAMPRE,v03
+49, Movimientos de compras o devoluciones,CEGALC,v01
+52, Cegal disponibilidad,CEGALD,v02
+46, Cegal ventas,CEGALV,v03
+16, Confirmación de devoluciones,CONFDV,v02
+5C, Albarán de Devolución y Pedido de Devolución,DEVOL2,v02
+5A, Albarán de Devolución y Pedido de Devolución,DEVOLU,v02
+43, Ficha del Libro Digital,ELIBRO,v03
+22, Albarán de entrada por entregas o devolución,ENTLOG,v01
+28, Albarán/Factura de entrega de Papelería,ENTPAP,v01
+44, Albarán de entrega o Factura: Reposición/Novedad/Depósito/Promoción,ENVIO,v08
+34, Cambios de estado,ESTADO,v04
+11, Documento de estado del depósito,ESTDEP,v02
+48, Estado de pendientes de recibir,ESTPEN,v01
+17, Factura de Liquidación de Venta,FACLIQ,v02
+7, Factura,FACTUL,v01
+3B, Albarán de reclamación: incidencias en la entrega de pedidos,INRECL,v03
+14, Informe de Inventario,INVENT,v02
+36, Cambios en Ficha del Libro,LIBMOD,v01
+51, Ficha del Libro,LIBROS,v08
+15, Liquidación de Comisiones,LIQCOM,v02
+12A, Informe de Liquidación de Ventas,LIQVE1,v02
+12B, Informe de Liquidación de Ventas,LIQVE2,v02
+18, Mensaje,MENSAJ,v01
+13, Informe de Movimientos,MOVIM,v02
+5B, Pedido de Devolución,PEDDEV,v02
+50, Albarán de pedido del cliente,PEDIDO,v06
+45, Plantilla de pedido de libros,PLAPED,v03
+3A, Albarán de reclamación / anulación de pedido,RECANU,v03
+31, Relación albaranes de devolución,RELDEV,v01
+23, Albarán de entrega a proveedores,SALLOG,v01
+47, Stock total de la librería,STOCKT,v01
+32, Validación del albarán de pedido del cliente,VALPED,v04
