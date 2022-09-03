@@ -4,6 +4,6 @@ class LineReader:
         i = 0
 
     def read(n=1) -> str:
-        aux = self.s[i]
+        aux = self.s[i:i+n]
         i += n
         return aux
