@@ -10,13 +10,27 @@ class Document:
     def process_line(self, line: str):
         l = LineReader(line)
         tdoc = l.read(1)
-        if tdoc == "I": # identification
+        if tdoc == "I": # Identification
             pass
-        elif tdoc == "C": # header (cabecera)
+        elif tdoc == "C": # header (Cabecera)
             pass
-        elif tdoc == "D": # detail
+        elif tdoc == "D": # Detail
             pass
-        elif tdoc in ["T", "V", "R", "M", "E", "P", "H"]: # other
+        #elif tdoc in ["T", "V", "R", "M", "E", "P", "H"]: # other
+        # other #
+        elif tdoc == "T": # Totals
+            pass
+        elif tdoc == "V": # tax (IVA)
+            pass
+        elif tdoc == "R": # Refusal (Rechazo)
+            pass
+        elif tdoc == "M": # Message
+            pass
+        elif tdoc == "E": # status (Estado)
+            pass
+        elif tdoc == "P": # Payment time (vencimiento)
+            pass
+        elif tdoc == "H": # dropsHiping (entregas directas de distribuidoras a cliente final en nombre de la librería que recibe el pedido)
             pass
         else: # error
             raise SyntaxError("SINLI syntax error", f"El codi de registre {tdoc} no es reconeix")
