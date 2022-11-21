@@ -2,12 +2,13 @@
 from io import open
 import os
 from enum import Enum
+
 # typing
 from typing_extensions import Self
 from dataclasses import dataclass, field
+
 # module
 from line import IdentificationLine, Line
-import doctype
 
 
 @dataclass
@@ -30,13 +31,6 @@ class Document:
     def read_other_line(self, line: str) -> Line:
         raise NotImplementedError("Depends on document type. Implement in subclasses")
 
-    class Doctype(Enum):
-        ABONO = ("Albarán o Factura de Abono", None)
-        CAMPRE = ("Cambios de precio", None)
-        ESTADO = ("Cambios de estado", None)  # noqa: F405
-        LIBROS = ("Ficha del Libro", doctype.libros.LibrosDoc)    # noqa: F405
-        MENSAJ = ("Mensaje", None)
-
     def process_line(self, line: str):
         tdoc = line[0:1]
         if tdoc == "I":  # Identification
@@ -46,17 +40,21 @@ class Document:
         elif tdoc == "D":  # Detail
             self.detail_lines.append(self.read_detail_line(line))
         # other #
-        elif (tdoc == "T"   # Totals
-              or tdoc == "V"   # tax (IVA)
-              or tdoc == "R"   # Refusal (Rechazo)
-              or tdoc == "M"   # Message
-              or tdoc == "E"   # status (Estado)
-              or tdoc == "P"   # Payment time (vencimiento)
-              or tdoc == "H"      # dropsHiping (entregas directas de distribuidoras a cliente final en nombre de la librería que recibe el pedido)
-              ):
+        elif (
+            tdoc == "T"  # Totals
+            or tdoc == "V"  # tax (IVA)
+            or tdoc == "R"  # Refusal (Rechazo)
+            or tdoc == "M"  # Message
+            or tdoc == "E"  # status (Estado)
+            or tdoc == "P"  # Payment time (vencimiento)
+            or tdoc
+            == "H"  # dropsHiping (entregas directas de distribuidoras a cliente final en nombre de la librería que recibe el pedido)
+        ):
             self.other_lines.append(self.read_other_line(line))
         else:  # error
-            raise SyntaxError("SINLI syntax error", f"El codi de registre {tdoc} no es reconeix")
+            raise SyntaxError(
+                "SINLI syntax error", f"El codi de registre {tdoc} no es reconeix"
+            )
 
     @classmethod
     def from_str(cls, s: str) -> Self:
@@ -69,7 +67,7 @@ class Document:
         if not doc.DOCTYPE:
             return doc
         doctype_s = doc.DOCTYPE
-        doctype_e = cls.Doctype[doctype_s]
+        doctype_e = DocumentDoctype[doctype_s]
         specific_doc = doctype_e.value[2]()
         # TODO crear mètode per llegir línies de detall, que no comencen per D i que podrien començar per alguna lletra reservada (!)
         # TODO llegir les línies úniques, que porten lletra davant, i un cop això, passar totes les línies restants amb process_detail_line
