@@ -22,7 +22,7 @@ class Document:
 
     def read_header_line(self, line: str) -> Line:
         # raise NotImplementedError("Depends on document type. Implement in subclasses")
-        return self.Header.from_str(str)
+        return self.Header.from_str(line)
 
     def read_detail_line(self, line: str) -> Line:
         raise NotImplementedError("Depends on document type. Implement in subclasses")
