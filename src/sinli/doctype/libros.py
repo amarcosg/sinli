@@ -4,27 +4,24 @@ from enum import Enum
 
 
 class LibrosDoc(Document):
-
     class Header(Line):
-
         class Field(Enum):
-            TYPE     =  ( 0,  1, "Tipo de Registro")
-            PROVIDER =  ( 1, 40, "Nombre del proveedor")
-            CURRENCY =  (41, 42, "Moneda")
+            TYPE = (0, 1, "Tipo de Registro")
+            PROVIDER = (1, 40, "Nombre del proveedor")
+            CURRENCY = (41, 42, "Moneda")
 
     class Body(Line):
-
         class Field(Enum):
-            EAN           = (   1,   18, "EAN")
-            ISBN_INVOICE  = (  19,   17, "ISBN (Con guiones) Facturación")
-            ISBN_COMPLETE = (  36,   17, "ISBN (Con guiones) Obra completa")
-            ISBN_VOLUME   = (  53,   17, "ISBN (Con guiones) Tomo")
-            ISBN_ISSUE    = (  70,   17, "ISBN (Con guiones) Fascículo")
-            REFERENCE     = (  87,   15, "Referencia")
-            TITLE_FULL    = ( 102,   80, "Título completo")
-            SUBTITLE      = ( 182,   80, "Subtítulo")
-            AUTHORS       = ( 262,  150, "Autor/es (Apellidos, Nombre)")
-            PUB_COUNTRY   = ( 412,    2, "País de publicación")
+            EAN = (1, 18, "EAN")
+            ISBN_INVOICE = (19, 17, "ISBN (Con guiones) Facturación")
+            ISBN_COMPLETE = (36, 17, "ISBN (Con guiones) Obra completa")
+            ISBN_VOLUME = (53, 17, "ISBN (Con guiones) Tomo")
+            ISBN_ISSUE = (70, 17, "ISBN (Con guiones) Fascículo")
+            REFERENCE = (87, 15, "Referencia")
+            TITLE_FULL = (102, 80, "Título completo")
+            SUBTITLE = (182, 80, "Subtítulo")
+            AUTHORS = (262, 150, "Autor/es (Apellidos, Nombre)")
+            PUB_COUNTRY = (412, 2, "País de publicación")
             """
             EDITOR       = (    ,     , "")
             BINDING= (    ,     , "")

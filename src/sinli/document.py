@@ -1,4 +1,3 @@
-# external general
 from io import open
 import os
 from enum import Enum
@@ -52,22 +51,23 @@ class Document:
         ):
             self.other_lines.append(self.read_other_line(line))
         else:  # error
-            raise SyntaxError(
+            raise Exception(
                 "SINLI syntax error", f"El codi de registre {tdoc} no es reconeix"
             )
 
     @classmethod
     def from_str(cls, s: str) -> Self:
-        doc = Document()
+        doc = cls()
         doctype_s = ""
         for line in s.split_lines():
             doc.process_line(line)
+            print("DOCTYPE", doc.DOCTYPE)
             if doc.DOCTYPE:
                 break
         if not doc.DOCTYPE:
             return doc
         doctype_s = doc.DOCTYPE
-        doctype_e = DocumentDoctype[doctype_s]
+        doctype_e = DocumentType[doctype_s]
         specific_doc = doctype_e.value[2]()
         # TODO crear mètode per llegir línies de detall, que no comencen per D i que podrien començar per alguna lletra reservada (!)
         # TODO llegir les línies úniques, que porten lletra davant, i un cop això, passar totes les línies restants amb process_detail_line
@@ -79,9 +79,11 @@ class Document:
         El juego de caracteres recomendado es el 850 OEM – Multilingual Latín I // (DOS Latin 1 = CP 850)
         https://docs.python.org/3/library/codecs.html#module-codecs
         """
-        doc = Document()
+        doc = cls()
         with open(filename, encoding="cp850") as f:
             for line in f:
+                line = line.strip()
+                print(f"Processing line: '{line}'")
                 doc.process_line(line)
         return doc
 
