@@ -1,8 +1,9 @@
 from ..document import Document
 from ..line import Line
 from enum import Enum
+from dataclasses import dataclass, field
 
-
+@dataclass
 class LibrosDoc(Document):
     class Header(Line):
         class Field(Enum):
@@ -10,9 +11,9 @@ class LibrosDoc(Document):
             PROVIDER = (1, 40, "Nombre del proveedor")
             CURRENCY = (41, 42, "Moneda")
 
-    class Body(Line):
+    class Book(Line):
         class Field(Enum):
-            EAN = (1, 18, "EAN")
+            EAN = (0, 18, "EAN")
             ISBN_INVOICE = (19, 17, "ISBN (Con guiones) Facturación")
             ISBN_COMPLETE = (36, 17, "ISBN (Con guiones) Obra completa")
             ISBN_VOLUME = (53, 17, "ISBN (Con guiones) Tomo")
@@ -67,3 +68,8 @@ class LibrosDoc(Document):
             URL= (    ,     , "")
             SUMMARY= (    ,     , "")
             """
+
+    linemap = {
+        "C": Header,
+        "": Book
+    }
