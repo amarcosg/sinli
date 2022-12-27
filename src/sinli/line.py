@@ -12,18 +12,16 @@ class Line:
 
     def from_dict(self, fields: {}):
         for (key, value) in fields.items():
-            setattr(self, key.name, value)
-        print(self)
-        return self
+            setattr(self, key, value)
 
     @classmethod
     def from_str(cls, line_s: str):
-        print(line_s)
         line_dict = {}
         for field in cls.Field:
+            print(field)
             start = field.value[0]
             end = start + field.value[1]
-            line_dict[field] = line_s[start:end].strip()
+            line_dict[field.name] = line_s[start:end].strip()
         line = Line()
         return line.from_dict(line_dict)
 
