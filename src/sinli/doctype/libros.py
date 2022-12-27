@@ -1,5 +1,5 @@
-from document import Document
-from line import Line
+from ..document import Document
+from ..line import Line
 from enum import Enum
 
 

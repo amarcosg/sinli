@@ -7,7 +7,7 @@ from typing_extensions import Self
 from dataclasses import dataclass, field
 
 # module
-from line import IdentificationLine, Line
+from .line import IdentificationLine, Line
 
 
 @dataclass
