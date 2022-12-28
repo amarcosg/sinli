@@ -23,7 +23,7 @@ class Line:
             end = start + field.value[1]
             line_dict[field.name] = line_s[start:end].strip()
             print(f"[DEBUG] {field} → {line_dict[field.name]}")
-        line = Line()
+        line = cls()
         return line.from_dict(line_dict)
 
 @dataclass
