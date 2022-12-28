@@ -19,20 +19,20 @@ class Document:
 
     def consume_line(line: str, doc: Self) -> Self:
         print(f"[DEBUG] line: {line}")
-        print(f"[DEBUG] sub line: {doc.subject_line}")
-        print(f"[DEBUG] id line: {doc.id_line}")
-        print(f"[DEBUG] doc: {doc}")
+        #print(f"[DEBUG] sub line: {doc.subject_line}")
+        #print(f"[DEBUG] id line: {doc.id_line}")
+        #print(f"[DEBUG] doc: {doc}")
 
         tdoc = line[0:1]
         if tdoc == "I" and not doc.subject_line: # generic processing, we still don't know:  # Subject
             doc.subject_line = SubjectLine.from_str(line)
-            print(f"[DEBUG] doc: {doc}")
+            #print(f"[DEBUG] doc: {doc}")
             return doc
 
         elif tdoc == "I" and not doc.id_line: # generic processing, we still don't know:  # Identification
             doc.id_line = IdentificationLine.from_str(line)
             doctype_str = doc.id_line.DOCTYPE if hasattr(doc, "id_line") else ""
-            print(f"[DEBUG] id_line: {doc.id_line}; doctype: {doctype_str}; doc: {doc}")
+            #print(f"[DEBUG] id_line: {doc.id_line}; doctype: {doctype_str}; doc: {doc}")
 
             if doctype_str: # we just processed the identification line
                 from .doctype import DocumentType

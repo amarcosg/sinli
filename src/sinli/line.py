@@ -7,8 +7,32 @@ class Line:
     class Field(Enum):
         EXAMPLE = (1, 7, "Example field located in 1st position with length 7")
 
+    # Export to string
+
     def __str__(self) -> str:
-        return str(vars(self))
+        field_l = []
+        # TODO: check that no fields are missing in the definition
+        for field in self.Field:
+            val = getattr(self, field.name)
+            vallen = len(val)
+            deflen = field.value[1]
+
+            if vallen < deflen: # pad with spaces
+                val = val + "".join([" " for i in range(0, deflen-vallen)])
+            elif vallen > deflen: # truncate
+                val = val[0:deflen]
+
+            field_l.append(val)
+
+        return "".join(field_l)
+
+    def to_csv(self):
+        return ", ".join(vars(self).values())
+
+    def __repr__(self) -> str:
+        return repr(vars(self))
+
+    # Import
 
     def from_dict(self, fields: {}):
         for (key, value) in fields.items():
@@ -28,6 +52,7 @@ class Line:
 
 @dataclass
 class SubjectLine(Line):
+
     class Field(Enum):
         TYPE = (0, 1, "Tipo de registro (I)")
         FORMAT = (1, 1, "Tipo de formato (N=Normalizado ; ?=Libre)")
