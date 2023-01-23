@@ -31,13 +31,14 @@ class Document:
 
         elif tdoc == "I" and not doc.id_line: # generic processing, we still don't know:  # Identification
             doc.id_line = IdentificationLine.from_str(line)
+            version_str = doc.id_line.VERSION if hasattr(doc, "id_line") else "" # ex: "v9"
             doctype_str = doc.id_line.DOCTYPE if hasattr(doc, "id_line") else ""
             #print(f"[DEBUG] id_line: {doc.id_line}; doctype: {doctype_str}; doc: {doc}")
 
             if doctype_str: # we just processed the identification line
                 from .doctype import DocumentType
                 doctype_tup = DocumentType[doctype_str]
-                doctype_class = doctype_tup.value[1]
+                doctype_class = doctype_tup.value[1][version_str]
                 newdoc = doctype_class.from_document(doc)
                 doc = newdoc
                 print(f"[DEBUG] linemap: {doc.linemap.items()}")
