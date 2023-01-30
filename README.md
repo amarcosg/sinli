@@ -38,3 +38,34 @@ and the different fields in each line are split by their byte position in the li
 ### SINLI versions
 
 There are no standard-wide versions in SINLI. Instead, each message type has its own version number. New versions are meant to be backwards compatible to older clients. The standaring committee tries to only add fields at the end of the line, not modifying the lengths or meanings of the existing ones. However, they do not commit to it and call for "get what you can" and for a human check before importing to a system. We support implementing different versions of a document type and parsing them accordingly, but will only implement older versions in a case by case basis. SINLI editors do not like developers implementing old versions because in their opinion, it makes users lazier to update. Because of this and other reasons, older versions specifications are not publicly available.
+
+## Goals
+
+### Generic
+
+- [x] Basic architecture for reading documents and lines
+- [x] Read LIBRO doctype
+- [x] Prepare the repo as an importable python package
+- [x] Implement document writing
+- [x] Manage different document versions
+- [ ] Manage table-based fields
+
+### For bookshops
+
+Implement these message types to send:
+
+- [ ] Albarán de pedido del cliente
+- [ ] Albarán de devolución
+- [ ] Mensaje de texto
+
+Implement these message types to read:
+
+- [x] Ficha del libro
+- [ ] Cambio de precio
+- [ ] Albarán de envío
+- [ ] Factura
+- [ ] Mensaje de texto
+
+### For distributors
+
+- [ ] ?
