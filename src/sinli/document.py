@@ -19,26 +19,24 @@ class Document:
 
     def consume_line(line: str, doc: Self) -> Self:
         print(f"[DEBUG] line: {line}")
-        #print(f"[DEBUG] sub line: {doc.subject_line}")
-        #print(f"[DEBUG] id line: {doc.id_line}")
-        #print(f"[DEBUG] doc: {doc}")
 
         tdoc = line[0:1]
         if tdoc == "I" and not doc.subject_line: # generic processing, we still don't know:  # Subject
             doc.subject_line = SubjectLine.from_str(line)
-            #print(f"[DEBUG] doc: {doc}")
             return doc
 
         elif tdoc == "I" and not doc.id_line: # generic processing, we still don't know:  # Identification
             doc.id_line = IdentificationLine.from_str(line)
-            version_str = doc.id_line.VERSION if hasattr(doc, "id_line") else "" # ex: "v9"
+            version_str = doc.id_line.VERSION if hasattr(doc, "id_line") else "" # ex: "09"
             doctype_str = doc.id_line.DOCTYPE if hasattr(doc, "id_line") else ""
-            #print(f"[DEBUG] id_line: {doc.id_line}; doctype: {doctype_str}; doc: {doc}")
 
             if doctype_str: # we just processed the identification line
                 from .doctype import DocumentType
                 doctype_tup = DocumentType[doctype_str]
-                doctype_class = doctype_tup.value[1][version_str]
+                doctype_class = doctype_tup.value[1].get(version_str)
+                if doctype_class == None:
+                    doctype_class = doctype_tup.value[1].get("??")
+                    print(f"[WARN] using class {doctype_class} to parse document at version {version_str}. Some fields may be missing or become mixed")
                 newdoc = doctype_class.from_document(doc)
                 doc = newdoc
                 print(f"[DEBUG] linemap: {doc.linemap.items()}")

@@ -7,8 +7,8 @@ class DocumentType(Enum):
     CAMPRE = ("Cambios de precio", None)
     ESTADO = ("Cambios de estado", None)  # noqa: F405
     LIBROS = ("Ficha del Libro", {
-        "07": v7.LibrosDoc,
         "08": v8.LibrosDoc,
-        "09": v9.LibrosDoc
+        "09": v9.LibrosDoc,
+        "??": v9.LibrosDoc
     })  # noqa: F405
     MENSAJ = ("Mensaje", None)
