@@ -25,3 +25,16 @@ Namely, the main classes are `Document` and `Line`. Each SINLI message is a `Doc
 Additionaly, `Line` has 2 subclasses, `SubjectLine` and `IdentificationLine` that share a common format for all document types.
 
 ## SINLI details
+
+### Transport
+
+SINLI uses the email as a common transport, but can be also fetched via FTP or other means if the parties agree to do so.
+
+### Structure
+
+SINLI documents or messages are text-based, one file each, and line-based. There is no special syntax, instead, each line is to be processed separately,
+and the different fields in each line are split by their byte position in the line. Therefore, each field has a fixed lenght. In fields where the data has variable lenght, the data is padded with spaces in case of text, and ascii 0 characters in case of numerical fields.
+
+### SINLI versions
+
+There are no standard-wide versions in SINLI. Instead, each message type has its own version number. New versions are meant to be backwards compatible to older clients. The standaring committee tries to only add fields at the end of the line, not modifying the lengths or meanings of the existing ones. However, they do not commit to it and call for "get what you can" and for a human check before importing to a system. We support implementing different versions of a document type and parsing them accordingly, but will only implement older versions in a case by case basis. SINLI editors do not like developers implementing old versions because in their opinion, it makes users lazier to update. Because of this and other reasons, older versions specifications are not publicly available.
