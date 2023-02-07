@@ -32,6 +32,18 @@ class Line:
     def __repr__(self) -> str:
         return repr(vars(self))
 
+    # TODO: converteix a Line de la mateixa classe però valors diferents
+    def to_readable(l: Line) -> dict:
+        t = l.tables
+        ld = vars(l)
+        newld = {}
+        for k,v in ld.items():
+            # resolve tables
+            newld[k] = t.get(k).get(v) or t.get(k).get("??") if t and t.get(k) else v
+            # trim str blank spaces and left zeroes
+            newld[k] = newld[k].strip().lstrip("0")
+        return newld
+
     # Import
 
     def from_dict(self, fields: {}):

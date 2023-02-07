@@ -68,7 +68,24 @@ class LibrosDoc(Document):
             URL = (1493, 199, "Dirección URL. Se recomienda nombrar al menos con el EAN en las primeras posiciones")
             SUMMARY = (1692, 1108, "Resumen, sinopsis")
 
+        tables = {
+            Field.BINDING: {
+                "??": "Sin especificar",
+                "01": "Tela",
+                "02": "Cartoné",
+                "03": "Rústica",
+                "04": "Bolsillo",
+                "05": "Troquelado",
+                "06": "Espiral",
+                "07": "Anillas",
+                "08": "Grapado",
+                "09": "Fascículo encuadernable",
+                "10": "Otros",
+            }
+        }
+
     linemap = {
         "C": Header,
         "": Book
     }
+
