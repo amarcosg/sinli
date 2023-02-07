@@ -26,7 +26,7 @@ class Line:
 
         return "".join(field_l)
 
-    def to_csv(self):
+    def to_csv(self) -> str:
         return ", ".join(vars(self).values())
 
     def __repr__(self) -> str:
