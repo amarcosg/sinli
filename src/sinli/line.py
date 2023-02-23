@@ -1,3 +1,4 @@
+from common.encoded_values import SinliCode as c, BasicType as t
 from enum import Enum
 from dataclasses import dataclass
 
@@ -57,10 +58,30 @@ class Line:
         for field in cls.Field:
             start = field.value[0]
             end = start + field.value[1]
-            line_dict[field.name] = line_s[start:end].strip()
+            line_dict[field.name] = decode(line_s[start:end].strip())
             print(f"[DEBUG] {field} → {line_dict[field.name]}")
         line = cls()
         return line.from_dict(line_dict)
+
+    def decode(vtype, value):
+        if vtype == t.STR:
+            return value
+        elif vtype == t.INT:
+            return int(value)
+        elif vtype == t.DATE6:
+            return datetime.datetime.strptime(value, "%m%Y")
+        elif vtype == t.DATE8:
+            return datetime.datetime.strptime(value, "%Y%m%d")
+        elif vtype in c:
+            return value # resolve code only when printing as it's not reversible
+
+    def encode(vlen, value):
+        if type(value) == date:
+            if vlen == 6: return value.strftime("%m%Y")
+            elif vlen == 8: return value.strftime("%Y%m%d")
+            else: raise(f"BUG! unexpected situation to SINLI-encode {value} to a length of {vlen} bytes")
+        else:
+            return str(value)
 
 @dataclass
 class SubjectLine(Line):
