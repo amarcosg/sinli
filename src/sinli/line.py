@@ -1,10 +1,13 @@
-from common.encoded_values import SinliCode as c, BasicType as t
+from .common.encoded_values import SinliCode as c, BasicType as t
 from enum import Enum
 from dataclasses import dataclass
-
+from pycountry import countries, languages
+import datetime
 
 @dataclass
 class Line:
+    country_class = countries.get(alpha_2="es").__class__
+    lang_class = languages.get(alpha_3="cat").__class__
     class Field(Enum):
         EXAMPLE = (1, 7, "Example field located in 1st position with length 7")
 
@@ -14,13 +17,14 @@ class Line:
         field_l = []
         # TODO: check that no fields are missing in the definition
         for field in self.Field:
-            val = getattr(self, field.name)
-            vallen = len(val)
             deflen = field.value[1]
+            val = self.encode(deflen, getattr(self, field.name))
+            vallen = len(val)
 
             if vallen < deflen: # pad with spaces
                 val = val + "".join([" " for i in range(0, deflen-vallen)])
             elif vallen > deflen: # truncate
+                print(f"[WARN] Unexpected: field {field.name}={val} shouldn't have been longer than {deflen} chars. Truncating to val[0:deflen]")
                 val = val[0:deflen]
 
             field_l.append(val)
@@ -34,9 +38,9 @@ class Line:
         return repr(vars(self))
 
     # TODO: converteix a Line de la mateixa classe però valors diferents
-    def to_readable(l: Line) -> dict:
-        t = l.tables
-        ld = vars(l)
+    def to_readable(self) -> dict:
+        t = self.tables
+        ld = vars(self)
         newld = {}
         for k,v in ld.items():
             # resolve tables
@@ -58,53 +62,74 @@ class Line:
         for field in cls.Field:
             start = field.value[0]
             end = start + field.value[1]
-            line_dict[field.name] = decode(line_s[start:end].strip())
+            vtype = field.value[2]
+            line_dict[field.name] = cls.decode(vtype, line_s[start:end].strip())
             print(f"[DEBUG] {field} → {line_dict[field.name]}")
         line = cls()
         return line.from_dict(line_dict)
 
     def decode(vtype, value):
+        """
+        Convert from a sinli field string to a richer type when it applies:
+        it returns a str, int, or date.
+        """
+        #print(f"vtype: {vtype}, value: {value}")
         if vtype == t.STR:
             return value
         elif vtype == t.INT:
-            return int(value)
+            return int(value or '0')
         elif vtype == t.DATE6:
-            return datetime.datetime.strptime(value, "%m%Y")
+            return datetime.datetime.strptime(value or "011970", "%m%Y")
         elif vtype == t.DATE8:
-            return datetime.datetime.strptime(value, "%Y%m%d")
+            return datetime.datetime.strptime(value or "19700101", "%Y%m%d")
+        elif vtype == t.LANG:
+            return languages.get(alpha_3 = value)
+        elif vtype == t.COUNTRY:
+            return countries.get(alpha_2 = value)
         elif vtype in c:
             return value # resolve code only when printing as it's not reversible
+        else:
+            print(f"[WARN] Unexpected case: var {value} is of type {vtype}")
+            return value
 
     def encode(vlen, value):
+        """
+        Convert an attribute from an object to a string, appendable to a sinli line
+        """
         if type(value) == date:
             if vlen == 6: return value.strftime("%m%Y")
             elif vlen == 8: return value.strftime("%Y%m%d")
             else: raise(f"BUG! unexpected situation to SINLI-encode {value} to a length of {vlen} bytes")
-        else:
+        elif type(value) == country_class:
+            return value.alpha_2
+        elif type(value) == language_class:
+            return value.alpha_3
+        else: # string, integer
             return str(value)
 
 @dataclass
 class SubjectLine(Line):
 
     class Field(Enum):
-        TYPE = (0, 1, "Tipo de registro (I)")
-        FORMAT = (1, 1, "Tipo de formato (N=Normalizado ; ?=Libre)")
-        DOCTYPE = (2, 6, "Nombre del tipo de documento")
-        VERSION = (8, 2, "Versión del tipo de documento")
-        FROM = (10, 8, "Identificador ESFANDE del remitente")
-        TO = (18, 8, "Identificador ESFANDE del destinatario")
-        LEN = (26, 5, "Cantidad de registros del fichero")
-        NUM_TRANS = (31, 7, "Número de transmisión s/emisor")
-        LOCAL_FROM = (38, 15, "Usuario local del emisor")
-        LOCAL_TO = (53, 15, "Usuario local del destino")
-        TEXT = (68, 7, "Texto libre")
-        FANDE = (75, 5, "FANDE")
+        TYPE = (0, 1, t.STR, "Tipo de registro (I)")
+        FORMAT = (1, 1, t.STR, "Tipo de formato (N=Normalizado ; ?=Libre)")
+        DOCTYPE = (2, 6, t.STR, "Nombre del tipo de documento")
+        VERSION = (8, 2, t.INT, "Versión del tipo de documento")
+        FROM = (10, 8, t.STR, "Identificador ESFANDE del remitente")
+        TO = (18, 8, t.STR, "Identificador ESFANDE del destinatario")
+        LEN = (26, 5, t.INT, "Cantidad de registros del fichero")
+        NUM_TRANS = (31, 7, t.INT, "Número de transmisión s/emisor")
+        LOCAL_FROM = (38, 15, t.STR, "Usuario local del emisor")
+        LOCAL_TO = (53, 15, t.STR, "Usuario local del destino")
+        TEXT = (68, 7, t.STR, "Texto libre")
+        FANDE = (75, 5, t.STR, "FANDE")
 
 @dataclass
 class IdentificationLine(Line):
     class Field(Enum):
-        TYPE = (0, 1, "Tipo de registro (I)")
-        FROM = (1, 50, "E-mail origen")
-        TO = (51, 50, "E-mail destino")
-        DOCTYPE = (101, 6, "Tipo de Fichero")
-        VERSION = (107, 2, "Versión fichero")
+        TYPE = (0, 1, t.STR, "Tipo de registro (I)")
+        FROM = (1, 50, t.STR, "E-mail origen")
+        TO = (51, 50, t.STR, "E-mail destino")
+        DOCTYPE = (101, 6, t.STR, "Tipo de Fichero")
+        VERSION = (107, 2, t.INT, "Versión fichero")
+        TRANSMISION_NUMBER = (109, 8, t.INT, "Nº de transmisión emisor")

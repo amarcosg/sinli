@@ -4,15 +4,14 @@ from ...common import SinliCode as c
 from ...common import BasicType as t
 from enum import Enum
 from dataclasses import dataclass, field
-from pycountry.db import Language, Country
 
 @dataclass
 class LibrosDoc(Document):
     class Header(Line):
         class Field(Enum):
-            TYPE = (0, 1, "Tipo de Registro")
-            PROVIDER = (1, 40, "Nombre del proveedor")
-            CURRENCY = (41, 42, "Moneda")
+            TYPE = (0, 1, t.STR, "Tipo de Registro")
+            PROVIDER = (1, 40, t.STR, "Nombre del proveedor")
+            CURRENCY = (41, 42, t.STR, "Moneda")
 
     class Book(Line):
         class Field(Enum):
@@ -25,11 +24,11 @@ class LibrosDoc(Document):
             TITLE_FULL = (101, 80, t.STR, "Título completo")
             SUBTITLE = (181, 80, t.STR, "Subtítulo")
             AUTHORS = (261, 150, t.STR, "Autor/es (Apellidos, Nombre)")
-            PUB_COUNTRY = (411, 2, Country, "País de publicación")
+            PUB_COUNTRY = (411, 2, t.COUNTRY, "País de publicación")
             EDITOR_ISBN = (413, 8, t.STR, "Editorial (Código ISBN)")
             EDITOR = (421, 40, t.STR, "Editorial (Nombre)")
             BINDING = (461, 2, c.BINDING, "Código de tipo de encuadernación")
-            LANGUAGE = (463, 3, Language, "Lengua de publicación (Código de la tabla ISO 639-2)")
+            LANGUAGE = (463, 3, t.LANG, "Lengua de publicación (Código de la tabla ISO 639-2)")
             EDITION = (466, 2, t.STR, "Número de edición")
             PUB_DATE= (468, 6, t.DATE6, "Fecha de publicación en formato mmaaaa")
             PAGE_NUM = (474, 4, t.INT, "Número de páginas")
@@ -51,7 +50,7 @@ class LibrosDoc(Document):
             INNER_ILLUSTRATOR = (820, 150, t.STR, "Lista de ilustradores del interior en formato 'Apellidos, Nombre' y separados por '/'")
             COLOR_ILL_NUM = (970, 5, t.INT, "Número de ilustraciones a color")
             TRANSLATORS = (975, 150, t.STR, "Lista de personas traductoras en formato 'Apellidos, Nombre' y separados por '/'")
-            LANG_ORIG = (1125, 3, Language, "Idioma original en código ISO 639-2")
+            LANG_ORIG = (1125, 3, t.LANG, "Idioma original en código ISO 639-2")
             THICK_MM = (1128, 3, t.INT, "Grosor en milímetros")
             WEIGHT_G = (1131, 6, t.INT, "Peso en gramos")
             AUDIENCE = (1137, 3, c.AUDIENCE, "Código de audiencia objetivo")
@@ -59,7 +58,7 @@ class LibrosDoc(Document):
             TB_LEVEL = (1141, 15, t.STR, "Libro de texto: nivel (infantil, primaria, eso, bachillerato, fp, universitaria)")
             TB_COURSE = (1156, 80, t.STR, "Libro de texto: Curso")
             TB_SUBJECT = (1236, 80, t.STR, "Libro de texto: Asignatura")
-            TB_REGION = (1316, 53, c.REGION, "Libro de texto: Lista de códigos de comunidades autónoma, separados por '/'.")
+            TB_REGION = (1316, 53, c.TB_REGION, "Libro de texto: Lista de códigos de comunidades autónoma, separados por '/'.")
             IBIC_VERSION = (1369, 3, t.STR, "iBIC: Tipo de versión. ej: 2.1")
             IBIC_TOPICS = (1372, 50, t.STR, "iBIC: Lista de temas (materias) separados por ';'")
             IBIC_REL = (1422, 1, t.STR, "iBIC: Asignación. 0 = Nativo; 1 = Mapeado")
