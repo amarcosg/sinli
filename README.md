@@ -48,7 +48,8 @@ There are no standard-wide versions in SINLI. Instead, each message type has its
 - [x] Prepare the repo as an importable python package
 - [x] Implement document writing
 - [x] Manage different document versions
-- [ ] Manage table-based fields
+- [x] Manage table-based fields
+- [x] Manage different data types
 
 ### For bookshops
 
@@ -68,4 +69,5 @@ Implement these message types to read:
 
 ### For distributors
 
-- [ ] ?
+- [ ] _WIP_ Albarán de envío de entrega o factura
+- ... ?
