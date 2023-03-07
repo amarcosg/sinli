@@ -1,5 +1,6 @@
 from enum import Enum
 from .libros import  v8, v9
+from .envio import v8
 #from .mensaje import MensajeDoc
 
 class DocumentType(Enum):
@@ -11,4 +12,8 @@ class DocumentType(Enum):
         "09": v9.LibrosDoc,
         "??": v9.LibrosDoc
     })  # noqa: F405
+    ENVIO = ("Albarán de envío de distribuidora", {
+        "08": v8.Enviodoc,
+        "??": v8.Enviodoc,
+    })
     MENSAJ = ("Mensaje", None)
