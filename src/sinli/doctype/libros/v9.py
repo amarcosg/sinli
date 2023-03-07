@@ -11,7 +11,7 @@ class LibrosDoc(Document):
         class Field(Enum):
             TYPE = (0, 1, t.STR, "Tipo de Registro")
             PROVIDER = (1, 40, t.STR, "Nombre del proveedor")
-            CURRENCY = (41, 42, t.STR, "Moneda")
+            CURRENCY = (41, 42, c.CURRENCY, "Moneda")
 
     class Book(Line):
         class Field(Enum):

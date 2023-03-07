@@ -9,6 +9,8 @@ class BasicType(Enum):
     BOOL=auto(),
     LANG=auto(),
     COUNTRY=auto(),
+    CURRENCY1=auto(), # "P"|"E"
+    CURRENCY3=auto(), # ISO-4217. ex: EUR
     #LIST_SEMICOLON
     #LIST_SLASH
 

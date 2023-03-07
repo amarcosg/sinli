@@ -1,13 +1,15 @@
 from .common.encoded_values import SinliCode as c, BasicType as t
 from enum import Enum
 from dataclasses import dataclass
-from pycountry import countries, languages
+from pycountry import countries, languages, currencies
 import datetime
 
 @dataclass
 class Line:
     country_class = countries.get(alpha_2="es").__class__
     lang_class = languages.get(alpha_3="cat").__class__
+    currency_class = currencies.get(alpha_3="EUR").__class__
+
     class Field(Enum):
         EXAMPLE = (1, 7, "Example field located in 1st position with length 7")
 
@@ -88,6 +90,10 @@ class Line:
             return languages.get(alpha_3 = value)
         elif vtype == t.COUNTRY:
             return countries.get(alpha_2 = value)
+        elif vtype == t.CURRENCY1:
+            return value # FIXME understand meaning of P or E values
+        elif vtype == t.CURRENCY3:
+            return currencies.get(alpha_3 = value)
         elif vtype in c:
             return value # resolve code only when printing as it's not reversible
         else:
@@ -106,8 +112,11 @@ class Line:
             return "S" if value == True else "N" # value == False
         elif type(value) == country_class:
             return value.alpha_2
-        elif type(value) == language_class:
+        elif type(value) == lang_class:
             return value.alpha_3
+        elif type(value) == currency_class:
+            if vlen == 3:  return value.alpha_3
+            #elif vlen == 1: return value # FIXME understand P and E values
         else: # string, integer
             return str(value)
 
