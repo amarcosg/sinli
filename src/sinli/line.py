@@ -78,6 +78,8 @@ class Line:
             return value
         elif vtype == t.INT:
             return int(value or '0')
+        elif vtype == t.BOOL:
+            return True if "S" else False # "N"
         elif vtype == t.DATE6:
             return datetime.datetime.strptime(value or "011970", "%m%Y")
         elif vtype == t.DATE8:
@@ -100,6 +102,8 @@ class Line:
             if vlen == 6: return value.strftime("%m%Y")
             elif vlen == 8: return value.strftime("%Y%m%d")
             else: raise(f"BUG! unexpected situation to SINLI-encode {value} to a length of {vlen} bytes")
+        elif type(value) == bool:
+            return "S" if value == True else "N" # value == False
         elif type(value) == country_class:
             return value.alpha_2
         elif type(value) == language_class:

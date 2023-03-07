@@ -6,6 +6,7 @@ class BasicType(Enum):
     DATE8=auto(), # AAAAMMDD
     STR=auto(),
     INT=auto(),
+    BOOL=auto(),
     LANG=auto(),
     COUNTRY=auto(),
     #LIST_SEMICOLON
