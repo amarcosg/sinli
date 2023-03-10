@@ -11,7 +11,7 @@ class LibrosDoc(Document):
         class Field(Enum):
             TYPE = (0, 1, t.STR, "Tipo de Registro")
             PROVIDER = (1, 40, t.STR, "Nombre del proveedor")
-            CURRENCY = (41, 42, t.STR, "Moneda")
+            CURRENCY = (41, 1, t.CURRENCY1, "Moneda")
 
     class Book(Line):
         class Field(Enum):
@@ -58,7 +58,6 @@ class LibrosDoc(Document):
             TB_LEVEL = (1141, 15, t.STR, "Libro de texto: nivel (infantil, primaria, eso, bachillerato, fp, universitaria)")
             TB_COURSE = (1156, 80, t.STR, "Libro de texto: Curso")
             TB_SUBJECT = (1236, 80, t.STR, "Libro de texto: Asignatura")
-.
             TB_REGION = (1316, 36, c.TB_REGION, "Libro de texto: Lista de códigos de comunidades autónoma, separados por '/'.")
 
             SUMMARY = (1352, 255, t.STR, "Resumen, sinopsis")
