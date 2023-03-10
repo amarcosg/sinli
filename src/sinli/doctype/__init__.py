@@ -1,6 +1,6 @@
 from enum import Enum
-from .libros import  v8, v9
-from .envio import v8
+from . import libros
+from . import envio
 #from .mensaje import MensajeDoc
 
 class DocumentType(Enum):
@@ -8,12 +8,12 @@ class DocumentType(Enum):
     CAMPRE = ("Cambios de precio", None)
     ESTADO = ("Cambios de estado", None)  # noqa: F405
     LIBROS = ("Ficha del Libro", {
-        "08": v8.LibrosDoc,
-        "09": v9.LibrosDoc,
-        "??": v9.LibrosDoc
+        "08": libros.v8.LibrosDoc,
+        "09": libros.v9.LibrosDoc,
+        "??": libros.v9.LibrosDoc
     })  # noqa: F405
     ENVIO = ("Albarán de envío de distribuidora", {
-        "08": v8.Enviodoc,
-        "??": v8.Enviodoc,
+        "08": envio.v8.EnvioDoc,
+        "??": envio.v8.EnvioDoc,
     })
     MENSAJ = ("Mensaje", None)
