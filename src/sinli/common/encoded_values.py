@@ -6,6 +6,7 @@ class BasicType(Enum):
     DATE8=auto(), # AAAAMMDD
     STR=auto(),
     INT=auto(),
+    FLOAT=auto(),
     BOOL=auto(),
     LANG=auto(),
     COUNTRY=auto(),
@@ -87,4 +88,23 @@ class SinliCode(Enum):
         "40": "cd-rom",
         "50": "dvd",
         "60": "otros",
+    },
+    INVOICE_OR_NOTE = {
+        "A": "Albarán",
+        "F": "Factura"
+    },
+    CONSIGNMENT_TYPE = {
+        "F": "Firme",
+        "D": "Depósito",
+        "C": "Cargo al depósito",
+        "P": "Promoción, obsequio"
+    },
+    PRICE_TYPE = {
+        "F": "Precio final fijo",
+        "L": "Precio final libre"
+    },
+    FREE_PRICE_TYPE = {
+        "C": "Coste",
+        "R": "Precio recomendado"
     }
+

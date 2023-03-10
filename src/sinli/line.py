@@ -80,6 +80,8 @@ class Line:
             return value
         elif vtype == t.INT:
             return int(value or '0')
+        elif vtype == t.FLOAT:
+            return float(value or '0')/100
         elif vtype == t.BOOL:
             return True if "S" else False # "N"
         elif vtype == t.DATE6:
@@ -104,7 +106,9 @@ class Line:
         """
         Convert an attribute from an object to a string, appendable to a sinli line
         """
-        if type(value) == date:
+        if type(value) == float:
+            return str(int(value * 100))
+        elif type(value) == date:
             if vlen == 6: return value.strftime("%m%Y")
             elif vlen == 8: return value.strftime("%Y%m%d")
             else: raise(f"BUG! unexpected situation to SINLI-encode {value} to a length of {vlen} bytes")

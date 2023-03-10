@@ -14,14 +14,13 @@ class EnvioDoc(Document):
             CLIENT = (41, 40, t.STR,  "Nombre del cliente")
             DELIVERY_NUM = (81, 10, t.STR, "Número de albarán")
             DATE = (91, 8, t.DATE8,  "Fecha del documento")
-            INVOICE_OR_NOTE = (99, 1, t.STR,  'Tipo de documento: “A” | ”F”') # FIXME afegeix nou tipus enum
-            CONSIGNMENT_TYPE = (100, 1, t.STR,  'Tipo de envío: “F” | “D” | “C”| ”P”') # FIXME afegeix nou tipus enum
+            INVOICE_OR_NOTE = (99, 1, c.INVOICE_OR_NOTE,  'Tipo de documento: “A” | ”F”')
+            CONSIGNMENT_TYPE = (100, 1, c.CONSIGNMENT_TYPE,  'Tipo de envío: “F” | “D” | “C”| ”P”')
             BOOK_FAIRE = (101, 1, t.BOOL, '¿Feria del libro? “S” | “N”')
-            SHIPPING_COST = (102, 10, t.INT, 'Importe gastos / portes')
+            SHIPPING_COST = (102, 10, t.FLOAT, 'Importe gastos / portes')
             CURRENCY = (112, 1, t.CURRENCY1, 'Moneda')
             FINAL_USER_MAILBOX = (113, 8, t.STR, 'Buzón usuario final')
 
-    # FIXME afegeix nous tipus enum
     class Detail(Line):
         class Field(Enum):
             TYPE = (0, 1, t.STR, 'Tipo de Registro, “D”')
@@ -30,16 +29,16 @@ class EnvioDoc(Document):
             REF = (36, 15, t.STR, 'Referencia')
             TITLE = (51, 50, t.STR, 'Título')
             AMOUNT = (101, 6, t.INT, 'Cantidad')
-            PRICE_NO_VAT = (107, 10, t.INT, 'Precio sin IVA')
-            PRICE_W_VAT = (117, 10, t.INT, 'Precio con IVA')
-            DISCOUNT = (127, 6, t.INT, 'Descuento')
-            VAT_PERCENT = (133, 5, t.INT, 'Porcentaje de IVA')
+            PRICE_NO_VAT = (107, 10, t.FLOAT, 'Precio sin IVA')
+            PRICE_W_VAT = (117, 10, t.FLOAT, 'Precio con IVA')
+            DISCOUNT = (127, 6, t.FLOAT, 'Descuento')
+            VAT_PERCENT = (133, 5, t.FLOAT, 'Porcentaje de IVA')
             NEW = (138, 1, t.BOOL, 'Novedad, “S” | ”N”')
-            PRICE_TYPE = (139, 1, t.STR, 'Tipo de precio, F (fijo)" | "L (libre)')
+            PRICE_TYPE = (139, 1, c.PRICE_TYPE, 'Tipo de precio, F (fijo)" | "L (libre)')
             RETURN_MAX_DATE = (140, 8, t.DATE8, 'Fecha tope devolución')
             ORDER_CODE = (148, 10, t.STR, 'Código de pedido')
             AUTHORS = (158, 150, t.STR, 'Autor/es (Apellidos, Nombre), Más de un autor separados por barra (/)')
-            FREE_PRICE_TYPE = (308, 1, t.STR, 'Tipo de precio libre, C (coste) | R (recomendado)')
+            FREE_PRICE_TYPE = (308, 1, c.FREE_PRICE_TYPE, 'Tipo de precio libre, C (coste) | R (recomendado)')
 
     class FreeDetail(Line):
         class Field(Enum):
@@ -50,17 +49,17 @@ class EnvioDoc(Document):
         class Field(Enum):
             TYPE = (0, 1, t.STR, 'Tipo de Registro, “T”')
             TOTAL_UNITS = (1, 8, t.INT, 'Total unidades')
-            TOTAL_PRICE_GROSS = (9, 10, t.INT, 'Total precio documento bruto')
-            TOTAL_PRICE_NET = (9, 10, t.INT, 'Total precio documento neto')
+            TOTAL_PRICE_GROSS = (9, 10, t.FLOAT, 'Total precio documento bruto')
+            TOTAL_PRICE_NET = (9, 10, t.FLOAT, 'Total precio documento neto')
 
     # FIXME: Implement type float, result of an (int + 0.00) / 100
     class Vat(Line):
         class Field(Enum):
             TYPE = (0, 1, t.STR, 'Tipo de Registro, “V”')
-            VAT_PERCENT = (1, 5, t.INT, "Porcentaje de IVA")
-            VAT_BASE = (6, 10, t.INT, "Base imponible")
-            VAT = (16, 10, t.INT, "IVA")
-            FEE_PERCENT = (26, 5, t.INT, "Porcentaje Recargo")
+            VAT_PERCENT = (1, 5, t.FLOAT, "Porcentaje de IVA")
+            VAT_BASE = (6, 10, t.FLOAT, "Base imponible")
+            VAT = (16, 10, t.FLOAT, "IVA")
+            FEE_PERCENT = (26, 5, t.FLOAT, "Porcentaje Recargo")
             REQ = (31, 10, t.INT, "REQ")
 
     class Status(Line):
