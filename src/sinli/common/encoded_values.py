@@ -16,6 +16,14 @@ class BasicType(Enum):
     #LIST_SLASH
 
 class SinliCode(Enum):
+
+    @classmethod
+    def get(cls, name: str):
+        try:
+            return cls.__getattr__(name)
+        except:
+            return None
+
     BINDING =  {
         "??": "Sin especificar",
         "01": "Tela",

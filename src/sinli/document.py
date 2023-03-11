@@ -101,3 +101,15 @@ class Document:
         if len(self.doc_lines) > 0:
             slines.append(os.linesep.join([str(line) for line in self.doc_lines]))
         return os.linesep.join(slines)
+
+    def to_readable(self) -> Self:
+        new_doc = self.from_document(self)
+        new_doc.subject_line = self.subject_line.to_readable()
+        new_doc.id_line = self.id_line.to_readable()
+        doc_lines = []
+        for line in self.doc_lines:
+            doc_lines.append(line.to_readable())
+        new_doc.doc_lines = doc_lines
+
+        return new_doc
+

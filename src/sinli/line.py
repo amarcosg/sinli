@@ -1,5 +1,6 @@
 from .common.encoded_values import SinliCode as c, BasicType as t
 from enum import Enum
+from typing_extensions import Self
 from dataclasses import dataclass
 from pycountry import countries, languages, currencies
 from datetime import date
@@ -40,27 +41,25 @@ class Line:
     def __repr__(self) -> str:
         return repr(vars(self))
 
-    # TODO: converteix a Line de la mateixa classe però valors diferents
-    def to_readable(self) -> dict:
-        t = self.tables
+    def to_readable(self) -> Self:
+        """
+        Returns a new dictionary with "pretified" values, that is,
+        resolved from sinli codes
+        """
         ld = vars(self)
         newld = {}
         for k,v in ld.items():
-            # resolve tables
-            newld[k] = t.get(k).get(v) or t.get(k).get("??") if t and t.get(k) else v
-            # trim str blank spaces and left zeroes
-            newld[k] = newld[k].strip().lstrip("0")
-        return newld
+            newld[k] = self.pretify(k,v)
+        return self.from_dict(newld)
 
     # Import
-
     def from_dict(self, fields: {}):
         for (key, value) in fields.items():
             setattr(self, key, value)
         return self
 
     @classmethod
-    def from_str(cls, line_s: str):
+    def from_str(cls, line_s: str) -> Self:
         line_dict = {}
         for field in cls.Field:
             start = field.value[0]
@@ -71,7 +70,8 @@ class Line:
         line = cls()
         return line.from_dict(line_dict)
 
-    def decode(vtype, value):
+    @staticmethod
+    def decode(vtype, value) -> object:
         """
         Convert from a sinli field string to a richer type when it applies:
         it returns a str, int, or date.
@@ -94,7 +94,7 @@ class Line:
         elif vtype == t.COUNTRY:
             return countries.get(alpha_2 = value)
         elif vtype == t.CURRENCY1:
-            return value # FIXME understand meaning of P or E values
+            return value # TODO understand meaning of P or E values
         elif vtype == t.CURRENCY3:
             return currencies.get(alpha_3 = value)
         elif vtype in c:
@@ -103,7 +103,8 @@ class Line:
             print(f"[WARN] Unexpected case: var {value} is of type {vtype}")
             return value
 
-    def encode(vlen, value):
+    @classmethod
+    def encode(cls, vlen, value) -> str:
         """
         Convert an attribute from an object to a string, appendable to a sinli line
         """
@@ -124,6 +125,19 @@ class Line:
             #elif vlen == 1: return value # TODO understand P and E values
         else: # string, integer
             return str(value)
+
+    @staticmethod
+    def pretify(k, v) -> str:
+        """
+        pretify field with name k and value v.
+        it resolves the sinli codes to their description value,
+        sinli codes have the same key as line field keys
+        """
+        try:
+            return str(c.get(k).value[0].get(v) or c.get(k).value[0].get("??"))
+        except:
+            return str(v)
+        return str(v)
 
 @dataclass
 class SubjectLine(Line):
