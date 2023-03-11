@@ -2,6 +2,7 @@ from .common.encoded_values import SinliCode as c, BasicType as t
 from enum import Enum
 from dataclasses import dataclass
 from pycountry import countries, languages, currencies
+from datetime import date
 import datetime
 
 @dataclass
@@ -85,9 +86,9 @@ class Line:
         elif vtype == t.BOOL:
             return True if "S" else False # "N"
         elif vtype == t.DATE6:
-            return datetime.datetime.strptime(value or "011970", "%m%Y")
+            return datetime.datetime.strptime(value or "011970", "%m%Y").date()
         elif vtype == t.DATE8:
-            return datetime.datetime.strptime(value or "19700101", "%Y%m%d")
+            return datetime.datetime.strptime(value or "19700101", "%Y%m%d").date()
         elif vtype == t.LANG:
             return languages.get(alpha_3 = value)
         elif vtype == t.COUNTRY:
@@ -114,13 +115,13 @@ class Line:
             else: raise(f"BUG! unexpected situation to SINLI-encode {value} to a length of {vlen} bytes")
         elif type(value) == bool:
             return "S" if value == True else "N" # value == False
-        elif type(value) == country_class:
+        elif type(value) == cls.country_class:
             return value.alpha_2
-        elif type(value) == lang_class:
+        elif type(value) == cls.lang_class:
             return value.alpha_3
-        elif type(value) == currency_class:
+        elif type(value) == cls.currency_class:
             if vlen == 3:  return value.alpha_3
-            #elif vlen == 1: return value # FIXME understand P and E values
+            #elif vlen == 1: return value # TODO understand P and E values
         else: # string, integer
             return str(value)
 
