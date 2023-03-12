@@ -117,4 +117,13 @@ class SinliCode(Enum):
         "R": "Precio recomendado",
         "??": ""
     }
+    PAYMENT_TYPE = {
+        "1": "Al contado",
+        "2": "A 30 días",
+        "3": "A 60 días",
+        "4": "A 90 días",
+        "5": "A 120 días",
+        "6": "Otras",
+        "??": "Sin especificar"
+    }
 

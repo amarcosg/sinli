@@ -52,7 +52,6 @@ class EnvioDoc(Document):
             TOTAL_PRICE_GROSS = (9, 10, t.FLOAT, 'Total precio documento bruto')
             TOTAL_PRICE_NET = (9, 10, t.FLOAT, 'Total precio documento neto')
 
-    # FIXME: Implement type float, result of an (int + 0.00) / 100
     class Vat(Line):
         class Field(Enum):
             TYPE = (0, 1, t.STR, 'Tipo de Registro, “V”')
