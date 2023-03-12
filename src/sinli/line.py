@@ -129,13 +129,15 @@ class Line:
         else: # string, integer
             return str(value)
 
-    @staticmethod
-    def pretify(k, v) -> str:
+    @classmethod
+    def pretify(cls, k, v) -> str:
         """
         pretify field with name k and value v.
         it resolves the sinli codes to their description value,
         sinli codes have the same key as line field keys
         """
+        if type(k) == cls.currency_class:
+            return v.name
         try:
             return str(c.get(k).value[0].get(v) or c.get(k).value[0].get("??"))
         except:
