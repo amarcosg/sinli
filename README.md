@@ -53,21 +53,14 @@ There are no standard-wide versions in SINLI. Instead, each message type has its
 
 ### For bookshops
 
-Implement these message types to send:
-
 - [ ] Albarán de pedido del cliente
 - [ ] Albarán de devolución
 - [ ] Mensaje de texto
 
-Implement these message types to read:
+### For distributors
 
 - [x] Ficha del libro
 - [ ] Cambio de precio
-- [ ] Albarán de envío
+- [x] Albarán de envío
 - [ ] Factura
 - [ ] Mensaje de texto
-
-### For distributors
-
-- [ ] _WIP_ Albarán de envío de entrega o factura
-- ... ?
