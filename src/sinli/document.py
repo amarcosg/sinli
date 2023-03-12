@@ -1,5 +1,6 @@
 from io import open
 import os
+import json
 from enum import Enum
 
 # typing
@@ -112,4 +113,7 @@ class Document:
         new_doc.doc_lines = doc_lines
 
         return new_doc
+
+    def to_json(self) -> str:
+        return json.dumps([line.to_readable().to_dict() for line in self.doc_lines])
 

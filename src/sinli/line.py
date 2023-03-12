@@ -58,6 +58,9 @@ class Line:
             setattr(self, key, value)
         return self
 
+    def to_dict(self) -> dict:
+        return vars(self)
+
     @classmethod
     def from_str(cls, line_s: str) -> Self:
         line_dict = {}
