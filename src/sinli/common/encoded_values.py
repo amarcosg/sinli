@@ -88,7 +88,7 @@ class SinliCode(Enum):
         "300": "Textos",
         "400": "General",
     },
-    TYPE = {
+    PRODUCT_TYPE = {
         "00": "sin calificar",
         "10": "libro",
         "20": "audio",
@@ -109,10 +109,12 @@ class SinliCode(Enum):
     },
     PRICE_TYPE = {
         "F": "Precio final fijo",
-        "L": "Precio final libre"
+        "L": "Precio final libre",
+        "??": ""
     },
     FREE_PRICE_TYPE = {
         "C": "Coste",
-        "R": "Precio recomendado"
+        "R": "Precio recomendado",
+        "??": ""
     }
 

@@ -37,7 +37,7 @@ class LibrosDoc(Document):
             TOPICS = (486, 20, t.STR, "Temas separados por ';' en códigos CDU o ISBN")
             KEYWORDS = (506, 80, t.STR, "Palabras clave o descriptores, separadas por '/'")
             STATUS = (586, 1, c.STATUS, "Código de situación en catálogo", )
-            TYPE = (587, 2, c.TYPE, "Código de tipo de producto")
+            PRODUCT_TYPE = (587, 2, c.PRODUCT_TYPE, "Código de tipo de producto")
             PRICE_PVP = (589, 10, t.INT, "PVP sin IVA en EUR (sin puntuación)")
             PRICE_PV = (599, 10, t.INT, "PV con IVA en EUR (sin puntuación)")
             TAX_IVA = (609, 5, t.INT, "Porcentaje de IVA (ej: 4, 16, 21, ...)")
