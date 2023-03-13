@@ -4,7 +4,7 @@ from enum import Enum
 from dataclasses import dataclass, field
 
 @dataclass
-class PedidosDoc(Document):
+class PedidoDoc(Document):
     class Header(Line):
         class Field(Enum):
             TYPE = (0, 1, "Tipo de registro")

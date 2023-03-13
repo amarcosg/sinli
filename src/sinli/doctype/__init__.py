@@ -1,5 +1,6 @@
 from enum import Enum
 from . import libros
+from . import pedido
 from . import envio
 from . import factul
 from . import mensaj
@@ -13,6 +14,10 @@ class DocumentType(Enum):
         "09": libros.v9.LibrosDoc,
         "??": libros.v9.LibrosDoc
     })  # noqa: F405
+    PEDIDO = ("Albarán de pedido del cliente", {
+        "07": pedido.v7.PedidoDoc,
+        "??": pedido.v7.PedidoDoc
+    })
     ENVIO = ("Albarán de envío de distribuidora", {
         "08": envio.v8.EnvioDoc,
         "??": envio.v8.EnvioDoc,

@@ -53,14 +53,14 @@ There are no standard-wide versions in SINLI. Instead, each message type has its
 
 ### For bookshops
 
-- [ ] Albarán de pedido del cliente
+- [ ] _WIP_ Albarán de pedido del cliente
 - [ ] Albarán de devolución
-- [ ] Mensaje de texto
+- [x] Mensaje de texto
 
 ### For distributors
 
 - [x] Ficha del libro
 - [ ] Cambio de precio
 - [x] Albarán de envío
-- [ ] Factura
-- [ ] Mensaje de texto
+- [x] Factura
+- [x] Mensaje de texto
