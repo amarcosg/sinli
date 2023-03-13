@@ -53,7 +53,7 @@ There are no standard-wide versions in SINLI. Instead, each message type has its
 
 ### For bookshops
 
-- [ ] _WIP_ Albarán de pedido del cliente
+- [x] Albarán de pedido del cliente
 - [ ] Albarán de devolución
 - [x] Mensaje de texto
 

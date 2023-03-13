@@ -116,7 +116,7 @@ class SinliCode(Enum):
         "C": "Coste",
         "R": "Precio recomendado",
         "??": ""
-    }
+    },
     PAYMENT_TYPE = {
         "1": "Al contado",
         "2": "A 30 días",
@@ -125,5 +125,15 @@ class SinliCode(Enum):
         "5": "A 120 días",
         "6": "Otras",
         "??": "Sin especificar"
-    }
+    },
+    ORDER_TYPE = {
+        "N": "Normal",
+        "F": "Sant Jordi / Feria del libro",
+        "D": "Pedido en depósito",
+        "O": "Otros"
+    },
+    ORDER_SOURCE = {
+        "N": "Normal",
+        "C": "Cliente",
+    },
 
