@@ -2,7 +2,7 @@ from enum import Enum
 from . import libros
 from . import envio
 from . import factul
-#from .mensaje import MensajeDoc
+from . import mensaj
 
 class DocumentType(Enum):
     ABONO = ("Albarán o Factura de Abono", None)
@@ -21,4 +21,7 @@ class DocumentType(Enum):
         "01": factul.v1.FacturaDoc,
         "??": factul.v1.FacturaDoc,
     })
-    MENSAJ = ("Mensaje", None)
+    MENSAJ = ("Mensaje", {
+        "01": mensaj.v1.MensajeDoc,
+        "??": mensaj.v1.MensajeDoc,
+    })
