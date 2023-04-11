@@ -20,7 +20,7 @@ cache:
 
 before_script:
   - python -V  # Print out python version for debugging
-  - pip install virtualenv wheel
+  - pip install virtualenv wheel build
   - virtualenv venv
   - source venv/bin/activate
   - cd /builds/devcontrol/sinli
