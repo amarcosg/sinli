@@ -2,8 +2,8 @@ from pycountry import countries, languages
 from enum import Enum, auto
 
 class BasicType(Enum):
-    DATE6=auto(), # MMAAAA
-    DATE8=auto(), # AAAAMMDD
+    MONTH_YEAR=auto(), # MMAAAA
+    DATE=auto(), # AAAAMMDD
     STR=auto(),
     INT=auto(),
     FLOAT=auto(),

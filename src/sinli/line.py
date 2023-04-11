@@ -88,9 +88,9 @@ class Line:
             return float(value or '0')/100
         elif vtype == t.BOOL:
             return True if "S" else False # "N"
-        elif vtype == t.DATE6:
+        elif vtype == t.MONTH_YEAR:
             return datetime.datetime.strptime(value or "011970", "%m%Y").date()
-        elif vtype == t.DATE8:
+        elif vtype == t.DATE:
             return datetime.datetime.strptime(value or "19700101", "%Y%m%d").date()
         elif vtype == t.LANG:
             return languages.get(alpha_3 = value)

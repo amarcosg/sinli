@@ -13,14 +13,14 @@ class FacturaDoc(Document):
             PROVIDER = (1, 40, t.STR,  "Nombre del proveedor")
             CLIENT = (41, 40, t.STR,  "Nombre del cliente")
             INVOICE_NUM = (81, 10, t.STR, "Número de factura")
-            DATE = (91, 8, t.DATE8,  "Fecha de la factura")
+            DATE = (91, 8, t.DATE,  "Fecha de la factura")
             CURRENCY = (99, 1, t.CURRENCY1, 'Moneda')
 
     class Detail(Line):
         class Field(Enum):
             TYPE = (0, 1, t.STR, 'Tipo de Registro, “D”')
             NOTE_NUM = (1, 10, t.STR, 'Número de albarán')
-            DATE = (11, 8, t.DATE8,  "Fecha")
+            DATE = (11, 8, t.DATE,  "Fecha")
             AMOUNT = (19, 10, t.FLOAT, "Importe")
 
     class DetailVat(Line):
@@ -52,7 +52,7 @@ class FacturaDoc(Document):
             TYPE = (0, 1, t.STR, 'Tipo de Registro, “P”')
             PAYMENT_TYPE = (1, 1, c.PAYMENT_TYPE, 'Forma de pago')
             AMOUNT = (2, 10, t.FLOAT, "Importe")
-            DUE_DATE = (12, 8, t.DATE8, "Fecha de vencimiento")
+            DUE_DATE = (12, 8, t.DATE, "Fecha de vencimiento")
             COMMENT = (20, 40, t.STR, "Observaciones")
 
 

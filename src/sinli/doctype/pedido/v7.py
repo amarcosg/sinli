@@ -12,13 +12,13 @@ class PedidoDoc(Document):
             TYPE = (0, 1, t.STR, "Tipo de registro")
             CUSTOMER = (1, 40, t.STR, "Nombre del cliente")
             PROVIDER = (41, 40, t.STR, "Nombre del proveedor")
-            ORDER_DATE = (81, 8, t.DATE8, "Fecha del pedido")
+            ORDER_DATE = (81, 8, t.DATE, "Fecha del pedido")
             ORDER_CODE = (89, 10, t.STR, "Código del pedido")
             ORDER_TYPE = (99, 1, c.ORDER_TYPE, "Tipo del pedido. Valores: N (normal) F (feria/sant jordi) D (depósito) O (otros)")
             CURRENCY = ( 100, 1, t.CURRENCY1, "Moneda")
             PRINT_ON_DEMAND = (101, 1, t.BOOL, "Impresión bajo demanda: S/N")
-            ASKED_DELIVERY_DATE = (102, 8, t.DATE8, "Fecha de entrega solicitada")
-            MAX_DELIVERY_DATE = (110, 8, t.DATE8, "Última fecha de entrega admitida")
+            ASKED_DELIVERY_DATE = (102, 8, t.DATE, "Fecha de entrega solicitada")
+            MAX_DELIVERY_DATE = (110, 8, t.DATE, "Última fecha de entrega admitida")
             STRICT_MAX_DELIVERY_DATE = (118, 1, t.BOOL, "Caducidad última fecha entrega: S/N. Si se entrega después del límnite, será rechazada?")
 
     class DeliveryPlace(Line):

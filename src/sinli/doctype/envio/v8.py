@@ -13,7 +13,7 @@ class EnvioDoc(Document):
             PROVIDER = (1, 40, t.STR,  "Nombre del proveedor")
             CLIENT = (41, 40, t.STR,  "Nombre del cliente")
             DELIVERY_NUM = (81, 10, t.STR, "Número de albarán")
-            DATE = (91, 8, t.DATE8,  "Fecha del documento")
+            DATE = (91, 8, t.DATE,  "Fecha del documento")
             INVOICE_OR_NOTE = (99, 1, c.INVOICE_OR_NOTE,  'Tipo de documento: “A” | ”F”')
             CONSIGNMENT_TYPE = (100, 1, c.CONSIGNMENT_TYPE,  'Tipo de envío: “F” | “D” | “C”| ”P”')
             BOOK_FAIRE = (101, 1, t.BOOL, '¿Feria del libro? “S” | “N”')
@@ -35,7 +35,7 @@ class EnvioDoc(Document):
             VAT_PERCENT = (133, 5, t.FLOAT, 'Porcentaje de IVA')
             NEW = (138, 1, t.BOOL, 'Novedad, “S” | ”N”')
             PRICE_TYPE = (139, 1, c.PRICE_TYPE, 'Tipo de precio, F (fijo)" | "L (libre)')
-            RETURN_MAX_DATE = (140, 8, t.DATE8, 'Fecha tope devolución')
+            RETURN_MAX_DATE = (140, 8, t.DATE, 'Fecha tope devolución')
             ORDER_CODE = (148, 10, t.STR, 'Código de pedido')
             AUTHORS = (158, 150, t.STR, 'Autor/es (Apellidos, Nombre), Más de un autor separados por barra (/)')
             FREE_PRICE_TYPE = (308, 1, c.FREE_PRICE_TYPE, 'Tipo de precio libre, C (coste) | R (recomendado)')
@@ -70,7 +70,7 @@ class EnvioDoc(Document):
             TITLE = (51, 50, t.STR, 'Título')
             STATUS = (101, 1, t.INT, 'Código de estado según la tabla de situaciones') # FIXME implementa enum "tabla de situaciones"
             REMOVE_PENDING = (102, 1, t.BOOL, 'Elimina pendientes? S | N')
-            DATE_APROX = (103, 8, t.DATE8, 'Fecha aprox. servicio')
+            DATE_APROX = (103, 8, t.DATE, 'Fecha aprox. servicio')
 
     linemap = {
         "C": Header,

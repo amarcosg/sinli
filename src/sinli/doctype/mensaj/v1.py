@@ -9,7 +9,7 @@ class MensajeDoc(Document):
     class Header(Line):
         class Field(Enum):
             TYPE = (0, 1, t.STR,  'Tipo de Registro “C”')
-            DATE = (1, 8, t.DATE8,  "Fecha del documento")
+            DATE = (1, 8, t.DATE,  "Fecha del documento")
             SOURCE_DOC_NUM = (9, 10, t.STR,  "Nº de documento origen")
             RESPONSE_DOC_NUM = (19, 10, t.STR,  "Nº de documento respuesta")
 
