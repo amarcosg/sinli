@@ -37,19 +37,19 @@ class Line:
         """Export to SINLI string"""
 
         field_l = []
-        # TODO: check that no fields are missing in the definition
         for field in self.Field:
             deflen = field.value[1]
             val = self.encode(deflen, getattr(self, field.name))
             vallen = len(val)
 
-            if vallen < deflen: # pad with spaces
+            if vallen < deflen:
                 f_type = field.value[2]
                 if f_type in [t.INT, t.FLOAT]:
-                    padding = "0"
+                    padding = "0" # pad left with zeroes
+                    val = "".join([padding for i in range(0, deflen-vallen)]) + val
                 else:
-                    padding = " "
-                val = val + "".join([padding for i in range(0, deflen-vallen)])
+                    padding = " " # pad right with spaces
+                    val = val + "".join([padding for i in range(0, deflen-vallen)])
             elif vallen > deflen: # truncate
                 print(f"[WARN] Unexpected: field {field.name}={val} shouldn't have been longer than {deflen} chars. Truncating to val[0:deflen]")
                 val = val[0:deflen]

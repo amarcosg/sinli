@@ -2,6 +2,7 @@ from io import open
 import os
 import json
 from enum import Enum
+from typing import List
 
 # typing
 from typing_extensions import Self
@@ -14,7 +15,7 @@ from .line import LongIdentificationLine, ShortIdentificationLine, Line
 class Document:
     long_id_line: LongIdentificationLine = field(default=LongIdentificationLine())
     short_id_line: ShortIdentificationLine = field(default=ShortIdentificationLine())
-    doc_lines: [Line] = field(default_factory=list)
+    doc_lines: List[Line] = field(default_factory=list)
     linemap = {}
 
     def __post_init__(self):
