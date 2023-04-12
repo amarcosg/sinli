@@ -6,32 +6,50 @@ from pycountry import countries, languages, currencies
 from datetime import date
 import datetime
 
-@dataclass
+@dataclass(repr=False)
 class Line:
     country_class = countries.get(alpha_2="es").__class__
     lang_class = languages.get(alpha_3="cat").__class__
     currency_class = currencies.get(alpha_3="EUR").__class__
 
     class Field(Enum):
-        EXAMPLE = (1, 7, "Example field located in 1st position with length 7")
+        EXAMPLE = (1, 7, t.STR, "Example field located in 1st position with length 7")
 
-    def get(self, name: str):
-        try:
-            return getattr(self, name)
-        except:
-            return None
+    def __post_init__(self):
+        """Initialize all fields with default values"""
+        for field in self.Field:
+            f_type = field.value[2]
+            if f_type == t.STR:
+                defval = ""
+            elif f_type in [t.INT, t.FLOAT]:
+                defval = 0
+            elif f_type in [t.DATE, t.MONTH_YEAR]:
+                defval = date.fromtimestamp(0)
+            # exclude booleans and coded types, as we can't guess
+            # which is the safe default value
+            else:
+                defval = ""
 
-    # Export to string
+            setattr(self, field.name, defval)
+
+
     def __str__(self) -> str:
+        """Export to SINLI string"""
+
         field_l = []
-        # TODO: check that no fields are missing in the definition
         for field in self.Field:
             deflen = field.value[1]
-            val = self.encode(deflen, self.get(field.name) or "")
+            val = self.encode(deflen, getattr(self, field.name))
             vallen = len(val)
 
-            if vallen < deflen: # pad with spaces
-                val = val + "".join([" " for i in range(0, deflen-vallen)])
+            if vallen < deflen:
+                f_type = field.value[2]
+                if f_type in [t.INT, t.FLOAT]:
+                    padding = "0" # pad left with zeroes
+                    val = "".join([padding for i in range(0, deflen-vallen)]) + val
+                else:
+                    padding = " " # pad right with spaces
+                    val = val + "".join([padding for i in range(0, deflen-vallen)])
             elif vallen > deflen: # truncate
                 print(f"[WARN] Unexpected: field {field.name}={val} shouldn't have been longer than {deflen} chars. Truncating to val[0:deflen]")
                 val = val[0:deflen]
@@ -149,9 +167,7 @@ class Line:
             return str(v)
         return str(v)
 
-@dataclass
-class SubjectLine(Line):
-
+class LongIdentificationLine(Line):
     class Field(Enum):
         TYPE = (0, 1, t.STR, "Tipo de registro (I)")
         FORMAT = (1, 1, t.STR, "Tipo de formato (N=Normalizado ; ?=Libre)")
@@ -166,8 +182,7 @@ class SubjectLine(Line):
         TEXT = (68, 7, t.STR, "Texto libre")
         FANDE = (75, 5, t.STR, "FANDE")
 
-@dataclass
-class IdentificationLine(Line):
+class ShortIdentificationLine(Line):
     class Field(Enum):
         TYPE = (0, 1, t.STR, "Tipo de registro (I)")
         FROM = (1, 50, t.STR, "E-mail origen")
