@@ -15,14 +15,19 @@ class Line:
     class Field(Enum):
         EXAMPLE = (1, 7, "Example field located in 1st position with length 7")
 
-    # Export to string
+    def get(self, name: str):
+        try:
+            return getattr(self, name)
+        except:
+            return None
 
+    # Export to string
     def __str__(self) -> str:
         field_l = []
         # TODO: check that no fields are missing in the definition
         for field in self.Field:
             deflen = field.value[1]
-            val = self.encode(deflen, getattr(self, field.name))
+            val = self.encode(deflen, self.get(field.name) or "")
             vallen = len(val)
 
             if vallen < deflen: # pad with spaces
