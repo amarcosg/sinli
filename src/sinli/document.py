@@ -2,6 +2,7 @@ from io import open
 import os
 import json
 from enum import Enum
+from typing import List
 
 # typing
 from typing_extensions import Self
@@ -14,7 +15,7 @@ from .line import SubjectLine, IdentificationLine, Line
 class Document:
     subject_line: SubjectLine = None
     id_line: IdentificationLine = None
-    doc_lines: [Line] = field(default_factory=list)
+    doc_lines: List[Line] = field(default_factory=list)
     #linemap: {} = field(default_factory=dict)
     linemap = {}
 
