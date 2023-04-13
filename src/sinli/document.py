@@ -2,34 +2,39 @@ from io import open
 import os
 import json
 from enum import Enum
+from typing import List
 
 # typing
 from typing_extensions import Self
 from dataclasses import dataclass, field
 
 # module
-from .line import SubjectLine, IdentificationLine, Line
+from .line import LongIdentificationLine, ShortIdentificationLine, Line
 
 @dataclass
 class Document:
-    subject_line: SubjectLine = None
-    id_line: IdentificationLine = None
-    doc_lines: [Line] = field(default_factory=list)
-    #linemap: {} = field(default_factory=dict)
+    long_id_line: LongIdentificationLine = field(default=LongIdentificationLine())
+    short_id_line: ShortIdentificationLine = field(default=ShortIdentificationLine())
+    doc_lines: List[Line] = field(default_factory=list)
     linemap = {}
+
+    def __post_init__(self):
+        self.long_id_line.TYPE = "I"
+        self.long_id_line.FANDE = "FANDE"
+        self.short_id_line.TYPE = "I"
 
     def consume_line(line: str, doc: Self) -> Self:
         print(f"[DEBUG] line: {line}")
 
         tdoc = line[0:1]
-        if tdoc == "I" and not doc.subject_line: # generic processing, we still don't know:  # Subject
-            doc.subject_line = SubjectLine.from_str(line)
+        if tdoc == "I" and not doc.long_id_line: # generic processing, we still don't know:  # Subject
+            doc.long_id_line = LongIdentificationLine.from_str(line)
             return doc
 
-        elif tdoc == "I" and not doc.id_line: # generic processing, we still don't know:  # Identification
-            doc.id_line = IdentificationLine.from_str(line)
-            version_str = doc.id_line.VERSION if hasattr(doc, "id_line") else "" # ex: "09"
-            doctype_str = doc.id_line.DOCTYPE if hasattr(doc, "id_line") else ""
+        elif tdoc == "I" and not doc.short_id_line: # generic processing, we still don't know:  # Identification
+            doc.short_id_line = ShortIdentificationLine.from_str(line)
+            version_str = doc.short_id_line.VERSION if hasattr(doc, "short_id_line") else "" # ex: "09"
+            doctype_str = doc.short_id_line.DOCTYPE if hasattr(doc, "short_id_line") else ""
 
             if doctype_str: # we just processed the identification line
                 from .doctype import DocumentType
@@ -90,23 +95,23 @@ class Document:
     @classmethod
     def from_document(cls, doc: Self) -> Self:
         new_doc = cls()
-        new_doc.subject_line = doc.subject_line
-        new_doc.id_line = doc.id_line
+        new_doc.long_id_line = doc.long_id_line
+        new_doc.short_id_line = doc.short_id_line
         new_doc.doc_lines = doc.doc_lines
         return new_doc
 
     def __str__(self) -> str:
         slines = []
-        slines.append(str(self.subject_line))
-        slines.append(str(self.id_line))
+        slines.append(str(self.long_id_line))
+        slines.append(str(self.short_id_line))
         if len(self.doc_lines) > 0:
             slines.append(os.linesep.join([str(line) for line in self.doc_lines]))
         return os.linesep.join(slines)
 
     def to_readable(self) -> Self:
         new_doc = self.from_document(self)
-        new_doc.subject_line = self.subject_line.to_readable()
-        new_doc.id_line = self.id_line.to_readable()
+        new_doc.long_id_line = self.long_id_line.to_readable()
+        new_doc.short_id_line = self.short_id_line.to_readable()
         doc_lines = []
         for line in self.doc_lines:
             doc_lines.append(line.to_readable())

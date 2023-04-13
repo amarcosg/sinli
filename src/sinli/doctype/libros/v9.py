@@ -5,7 +5,6 @@ from ...common import BasicType as t
 from enum import Enum
 from dataclasses import dataclass, field
 
-@dataclass
 class LibrosDoc(Document):
     class Header(Line):
         class Field(Enum):
