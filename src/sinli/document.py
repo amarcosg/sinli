@@ -24,19 +24,19 @@ class Document:
         self.short_id_line.TYPE = "I"
 
     def consume_line(line: str, doc: Self) -> Self:
-        print(f"[DEBUG] line: {line}")
+        print(f"\n[DEBUG] line: '{line}'")
 
         tdoc = line[0:1]
-        if tdoc == "I" and not doc.long_id_line: # generic processing, we still don't know:  # Subject
+        if tdoc == "I" and not doc.long_id_line.FROM: # generic processing, we still don't know the doctype:  # Long id
             doc.long_id_line = LongIdentificationLine.from_str(line)
             return doc
 
-        elif tdoc == "I" and not doc.short_id_line: # generic processing, we still don't know:  # Identification
+        elif tdoc == "I" and not doc.short_id_line.FROM: # generic processing, we still don't know the doctype:  # Short id
             doc.short_id_line = ShortIdentificationLine.from_str(line)
             version_str = doc.short_id_line.VERSION if hasattr(doc, "short_id_line") else "" # ex: "09"
             doctype_str = doc.short_id_line.DOCTYPE if hasattr(doc, "short_id_line") else ""
 
-            if doctype_str: # we just processed the identification line
+            if doctype_str: # we just processed the short identification line
                 from .doctype import DocumentType
                 doctype_tup = DocumentType[doctype_str]
                 doctype_class = doctype_tup.value[1].get(version_str)
