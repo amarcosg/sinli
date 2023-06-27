@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.1.2] - 2023-06-27
+## [1.1.3] - 2023-06-27
 
 ### Fixed
 
@@ -18,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Document attributes doctype_code and version_code
 - Autopopulate the identification lines fields that we can derive from their parent Document
 - Example usage in the README
+
+## [1.1.2] - 2023-05-22
+
+### Changed
+
+- Extend python requirements down to 3.7
 
 ## [1.1.1] - 2023-05-03
 
