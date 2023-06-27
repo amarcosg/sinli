@@ -168,6 +168,10 @@ class Line:
         return str(v)
 
 class LongIdentificationLine(Line):
+    def __post_init__(self):
+        super().__post_init__()
+        self.TYPE = "I"
+
     class Field(Enum):
         TYPE = (0, 1, t.STR, "Tipo de registro (I)")
         FORMAT = (1, 1, t.STR, "Tipo de formato (N=Normalizado ; ?=Libre)")
@@ -183,6 +187,10 @@ class LongIdentificationLine(Line):
         FANDE = (75, 5, t.STR, "FANDE")
 
 class ShortIdentificationLine(Line):
+    def __post_init__(self):
+        super().__post_init__()
+        self.TYPE = "I"
+
     class Field(Enum):
         TYPE = (0, 1, t.STR, "Tipo de registro (I)")
         FROM = (1, 50, t.STR, "E-mail origen")
