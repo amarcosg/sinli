@@ -13,8 +13,8 @@ from .line import LongIdentificationLine, ShortIdentificationLine, Line
 
 @dataclass
 class Document:
-    long_id_line: LongIdentificationLine = field(default=LongIdentificationLine())
-    short_id_line: ShortIdentificationLine = field(default=ShortIdentificationLine())
+    long_id_line: LongIdentificationLine = field(default_factory=LongIdentificationLine)
+    short_id_line: ShortIdentificationLine = field(default_factory=ShortIdentificationLine)
     doc_lines: List[Line] = field(default_factory=list)
     linemap = {}
 
