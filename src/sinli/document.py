@@ -17,11 +17,33 @@ class Document:
     short_id_line: ShortIdentificationLine = field(default_factory=ShortIdentificationLine)
     doc_lines: List[Line] = field(default_factory=list)
     linemap = {}
+    doctype_codes = {}
+    doctype_code = ""
+    version_code = ""
+
+    def get_doctype_version(self) -> str:
+        """
+        Produces the sinli version string, like "09"
+        from the package of the instance class, such as sinli.libros.v9
+        """
+        pkg = self.__class__.__module__
+        version_code = pkg.split('.')[-1]
+        return version_code.replace('v', '').zfill(2)
 
     def __post_init__(self):
-        self.long_id_line.TYPE = "I"
-        self.long_id_line.FANDE = "FANDE"
-        self.short_id_line.TYPE = "I"
+        from .doctype import DocumentType
+        for doctype in DocumentType:
+            name = doctype.name
+            version_map = doctype.value[1]
+            if not version_map: continue
+            if version_map['??'] == self.__class__:
+                self.doctype_code = name
+
+        self.version_code = self.get_doctype_version()
+        self.long_id_line.DOCTYPE = self.doctype_code
+        self.long_id_line.VERSION = self.version_code
+        self.short_id_line.DOCTYPE = self.doctype_code
+        self.short_id_line.VERSION = self.version_code
 
     def consume_line(line: str, doc: Self) -> Self:
         print(f"\n[DEBUG] line: '{line}'")
