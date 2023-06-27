@@ -39,6 +39,68 @@ and the different fields in each line are split by their byte position in the li
 
 There are no standard-wide versions in SINLI. Instead, each message type has its own version number. New versions are meant to be backwards compatible to older clients. The standaring committee tries to only add fields at the end of the line, not modifying the lengths or meanings of the existing ones. However, they do not commit to it and call for "get what you can" and for a human check before importing to a system. We support implementing different versions of a document type and parsing them accordingly, but will only implement older versions in a case by case basis. SINLI editors do not like developers implementing old versions because in their opinion, it makes users lazier to update. Because of this and other reasons, older versions specifications are not publicly available.
 
+## Example code
+
+Read a document from a SINLI file
+```python
+from sinli import Document
+
+d = Document.from_filename("/path/to/document.sinli")
+```
+
+Generate a SINLI document
+```python
+from sinli import *
+from stdnum import isbn
+
+# Create a catalog document
+catalog = libros.v9.LibrosDoc()
+catalog.long_id_line.FROM = "LIB12345"
+catalog.long_id_line.TO = "LIB98765"
+catalog.short_id_line.FROM = "sinli@provider.example.org"
+catalog.short_id_line.TO = "sinli@library.example.org"
+
+# Create the header line of the doc
+header = libros.v9.LibrosDoc.Header()
+header.TYPE = "C"
+header.PROVIDER = "Traficantes de Sueños"
+header.CURRENCY = "E"
+
+catalog.doc_lines.append(header)
+                                                                               
+# Create one book for the catalog document                                     
+book = libros.v9.LibrosDoc.Book()
+
+book.EAN = "9788494597879"
+book.ISBN_INVOICE = isbn.format(book.EAN)
+book.AUTHOR_NAME = "Raquel Gutiérrez Aguilar"
+book.TITLE_FULL = "Horizontes comunitario-populares"
+book.PRICE_PV = 12.00
+book.TAX_IVA = 4.00
+book.PRICE_PVP = book.PRICE_PV / (1 + book.TAX_IVA / 100) # precio sin IVA
+book.PRICE_TYPE = "F"
+
+catalog.doc_lines.append(book)
+
+# Final details
+catalog.long_id_line.LEN = len(catalog.doc_lines) + 2 # implementation of this field varies
+```
+
+Export a SINLI document object to string
+```python
+import sinli
+
+catalog: libros.v9.LibrosDoc
+
+# ...
+
+# SINLI message string
+print(str(catalog))
+
+# Debugging string
+print(repr(catalog))
+```
+
 ## Goals
 
 ### Generic

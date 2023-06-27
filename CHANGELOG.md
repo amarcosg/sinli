@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.2] - 2023-06-27
+
+### Fixed
+
+- Price and tax data types in LibrosDoc.Book. They are t.FLOAT now
+
+### Added
+
+- Document attributes doctype_code and version_code
+- Autopopulate the identification lines fields that we can derive from their parent Document
+- Example usage in the README
+
 ## [1.1.1] - 2023-05-03
 
 ### Added
