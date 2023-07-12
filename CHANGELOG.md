@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.4] - 2023-07-12
+
+### Fixed
+
+- Autopopulate the field FORMAT of long identification line and short and long id line TYPE fields. They were missed in 1.1.3
+
+### Added
+
+- Add source distribution in gitlab ci
+
 ## [1.1.3] - 2023-06-27
 
 ### Fixed
