@@ -4,6 +4,7 @@ from . import pedido
 from . import envio
 from . import factul
 from . import mensaj
+from . import devolu
 
 class DocumentType(Enum):
     ABONO = ("Albarán o Factura de Abono", None)
@@ -29,4 +30,8 @@ class DocumentType(Enum):
     MENSAJ = ("Mensaje", {
         "01": mensaj.v1.MensajeDoc,
         "??": mensaj.v1.MensajeDoc,
+    })
+    DEVOLU = ("Devoluciones", {
+        "02": devolu.v2.DevolucionDoc,
+        "??": devolu.v2.DevolucionDoc,   
     })
