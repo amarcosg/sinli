@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.4] - 2023-07-12
+
+### Fixed
+
+- Autopopulate the field FORMAT of long identification line and short and long id line TYPE fields. They were missed in 1.1.3
+
+### Added
+
+- Add source distribution in gitlab ci
+
+## [1.1.3] - 2023-06-27
+
+### Fixed
+
+- Price and tax data types in LibrosDoc.Book. They are t.FLOAT now
+
+### Added
+
+- Document attributes doctype_code and version_code
+- Autopopulate the identification lines fields that we can derive from their parent Document
+- Example usage in the README
+
+## [1.1.2] - 2023-05-22
+
+### Changed
+
+- Extend python requirements down to 3.7
+
 ## [1.1.1] - 2023-05-03
 
 ### Added

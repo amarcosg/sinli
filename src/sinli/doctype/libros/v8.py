@@ -5,7 +5,6 @@ from ...common import BasicType as t
 from enum import Enum
 from dataclasses import dataclass, field
 
-@dataclass
 class LibrosDoc(Document):
     class Header(Line):
         class Field(Enum):
@@ -38,9 +37,9 @@ class LibrosDoc(Document):
             KEYWORDS = (506, 80, t.STR, "Palabras clave o descriptores, separadas por '/'")
             STATUS = (586, 1, c.STATUS, "Código de situación en catálogo", )
             PRODUCT_TYPE = (587, 2, c.PRODUCT_TYPE, "Código de tipo de producto")
-            PRICE_PVP = (589, 10, t.INT, "PVP sin IVA en EUR (sin puntuación)")
-            PRICE_PV = (599, 10, t.INT, "PV con IVA en EUR (sin puntuación)")
-            TAX_IVA = (609, 5, t.INT, "Porcentaje de IVA (ej: 4, 16, 21, ...)")
+            PRICE_PVP = (589, 10, t.FLOAT, "PVP sin IVA en EUR (sin puntuación)")
+            PRICE_PV = (599, 10, t.FLOAT, "PV con IVA en EUR (sin puntuación)")
+            TAX_IVA = (609, 5, t.FLOAT, "Porcentaje de IVA (ej: 4, 16, 21, ...)")
             PRICE_TYPE = (614, 1, t.STR, "Tipo de precio. F = Fijo, L = Libre. Si es L, el precio sin IVA será el precio de cesión, y el precio con IVA, el precio de sesión más el IVA correspondiente")
             COLLECTION = (615, 40, t.STR, "Nombre de la colección")
             COL_NUM = (655, 10, t.STR, "Número de colección")
