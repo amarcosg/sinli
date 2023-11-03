@@ -17,13 +17,11 @@ class DevolucionDoc(Document):
             DOCUMENT_TYPE=(99, 1, t.STR, "Tipo de documento: D| P")
             DEVOLUTION_TYPE=(100, 1, t.STR, "Tipo de devolución:F|D") #TODO sinli code
             FAIR_BOOK= (101, 1, t.BOOL, "Feria del libro:S | N") # TODO sinli code  
-            CURRENCY= (102, 1, t.STR, "P | E") # TODO sinli code
+            CURRENCY= (102, 1, t.CURRENCY1, "P | E") # TODO sinli code
 
     class Detail(Line):
         class Field(Enum): 
-            # TODO: omplir amb els camps de devolucion, aquests encara son de libros
             # NOM_ANGLES = (POSICIÓ_CALCULADA, LONGITUD=Long., TIPUS=Tipo_Dato, DESCRIPCIO=Campo+Valor)
-
             TYPE= (0,1, t.STR, "tipo de registro: D")
             ISBN= (1,17, t.STR, "ISBN")
             EAN= (18,18, t.STR,"EAN")
@@ -33,18 +31,15 @@ class DevolucionDoc(Document):
             PRICE=(107,10, t.FLOAT, "precio sin iva")
             PRICE_IVA=(117,10, t.FLOAT, "precio con iva")
             DESCOUNT= (127,6, t.FLOAT, "descuento")
-            PRICE_TYPE=(133,1, t.STR,"tipo de precio: F|L")
+            PRICE_TYPE=(133,1, c.PRICE_TYPE,"tipo de precio: F|L")
             NOVEDAD= (134,1, t.STR, "novedad")
             DOCUMENT=(135,10, t.STR, "documento de compra")
-            DATE=(145,8, t.INT, "fecha d ecompra")
-            DEVOLUTION_CAUSE=(153,1, t.STR, "tabla de estado")
-
-
+            DATE=(145,8, t.INT, "fecha de compra")
+            DEVOLUTION_CAUSE=(153,1,c.DEVOLUTION_CAUSE, "causa de devolucion")
 
 
     class Total(Line):
         class Field(Enum):
-            # TODO: omplir amb els camps de devolucion, aquests encara son de libros
             TYPE_REGISTER = (0, 1, t.STR, "Tipo de Registro: T")
             TOTAL_UD = (1, 8, t.INT, "total unidades")
             TOTAL_DOCUMENT = (9,10, t.FLOAT, "total documento bruto")

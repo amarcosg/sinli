@@ -137,3 +137,8 @@ class SinliCode(Enum):
         "C": "Cliente",
     },
 
+    DEVOLUTION_CAUSE= {
+        "0": "Estropeados", 
+        "1": "Edición desfasada",
+        "2": "Incidencia en la entrega" 
+    }
