@@ -8,7 +8,7 @@ from datetime import datetime
 
 @dataclass(repr=False)
 class Line:
-    country_class = countries.get(alpha_2="es").__class__
+    country_class = countries.get(alpha_2="ES").__class__
     lang_class = languages.get(alpha_3="cat").__class__
     currency_class = currencies.get(alpha_3="EUR").__class__
 
