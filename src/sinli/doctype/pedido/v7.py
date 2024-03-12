@@ -20,6 +20,7 @@ class PedidoDoc(Document):
             ASKED_DELIVERY_DATE = (102, 8, t.DATE, "Fecha de entrega solicitada")
             MAX_DELIVERY_DATE = (110, 8, t.DATE, "Última fecha de entrega admitida")
             STRICT_MAX_DELIVERY_DATE = (118, 1, t.BOOL, "Caducidad última fecha entrega: S/N. Si se entrega después del límnite, será rechazada?")
+            REFERENCE_BOLETIN = (119, 15, t.STR, "Referencia boletín o lote")
 
     class DeliveryPlace(Line):
         class Field(Enum):
