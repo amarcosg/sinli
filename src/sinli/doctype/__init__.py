@@ -33,5 +33,5 @@ class DocumentType(Enum):
     })
     DEVOLU = ("Devoluciones", {
         "02": devolu.v2.DevolucionDoc,
-        "??": devolu.v2.DevolucionDoc,   
+        "??": devolu.v2.DevolucionDoc,
     })

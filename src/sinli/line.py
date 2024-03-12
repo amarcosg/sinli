@@ -172,6 +172,7 @@ class LongIdentificationLine(Line):
         super().__post_init__()
         self.TYPE = "I"
         self.FORMAT = "N"
+        self.FANDE = "FANDE"
 
     class Field(Enum):
         TYPE = (0, 1, t.STR, "Tipo de registro (I)")
