@@ -101,6 +101,32 @@ print(str(catalog))
 print(repr(catalog))
 ```
 
+Parse a SINLI email subject line
+```python
+from sinli.subject import Subject
+
+subject_line = "ESFANDEL1234567ESFANDELIB12345ENVIO 08FANDE"
+subject = Subject.from_str(subject_line)
+
+print(f'Received a SINLI message: {subject.DOCTYPE} ({subject.get_doctype_desc()})')
+# Received a SINLI message: ENVIO (Albarán de envío de distribuidora)
+```
+
+Build a SINLI email subject
+```python
+from sinli.subject import Subject
+
+subject = Subject()
+
+subject.FROM = "L1234567"
+subject.TO = "LIB12345"
+subject.DOCTYPE = "ENVIO"
+subject.VERSION = 8
+
+print(f"Send email with subject '{subject}'")
+# Send email with subject 'ESFANDEL1234567ESFANDELIB12345ENVIO 08FANDE'
+```
+
 ## Goals
 
 ### Generic
