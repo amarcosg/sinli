@@ -37,6 +37,26 @@ class Subject(Line):
         self.FILLING2 = "ESFANDE"
         self.FILLING3 = "FANDE"
 
+    def is_valid(self):
+        """
+        Check if all parameters are set with a minimum of requirements.
+        We need a method like this here because Line's in general must be lax
+        in what they accept, that is, many fields may be blank and that's ok,
+        the only room for improving this check at line parsing is to capture
+        Errors and instead, return some Result<Line, Error>, for instance.
+        """
+        _is_valid = False
+        try:
+            _is_valid = len(self.FROM) == 8 and \
+            len(self.TO) == 8 and \
+            self.DOCTYPE != None and self.DOCTYPE != "" and \
+            self.VERSION != None and self.VERSION != 0 and \
+            self.get_doctype_desc() != "" and \
+            self.get_doctype_class() != ""
+        except:
+            return False
+        return _is_valid
+
     def get_doctype_desc(self) -> str:
         if self.doctype_desc == "":
             self.doctype_desc = getattr(DocumentType, self.DOCTYPE).value[0]
