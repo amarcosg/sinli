@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Manage non-text values errors when parsings fields from a Line
+
 ## [1.1.5] - 2024-04-10
 
 ### Added
