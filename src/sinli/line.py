@@ -91,7 +91,15 @@ class Line:
             start = field.value[0]
             end = start + field.value[1]
             vtype = field.value[2]
-            line_dict[field.name] = cls.decode(vtype, line_s[start:end].strip())
+            try:
+                line_dict[field.name] = cls.decode(vtype, line_s[start:end].strip())
+            except ValueError as err:
+                print(f"[ERROR] Decode error. {field} with value \"{line_s[start:end]}\" can't be converted to a float or int.", err)
+                line_dict[field.name] = 0
+            except NameError as err:
+                print(f"[ERROR] Decode error. {field} with value \"{line_s[start:end]}\" can't be converted to a language, currency or country.", err)
+                line_dict[field.name] = None
+
             print(f"[DEBUG] {field} → {line_dict[field.name]}")
         line = cls()
         return line.from_dict(line_dict)
