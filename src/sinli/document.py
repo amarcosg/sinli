@@ -98,7 +98,7 @@ class Document:
     def from_str(cls, s: str) -> Self:
         doc = cls()
         doctype_s = ""
-        cls.consume_lines(s.split_lines(), doc)
+        cls.consume_lines(s.splitlines(), doc)
         return doc
 
     @classmethod

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Manage non-text values errors when parsings fields from a Line
+- Fix bug on parsing document from string
 
 ## [1.1.5] - 2024-04-10
 
