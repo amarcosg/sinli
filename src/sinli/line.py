@@ -51,7 +51,7 @@ class Line:
                     padding = " " # pad right with spaces
                     val = val + "".join([padding for i in range(0, deflen-vallen)])
             elif vallen > deflen: # truncate
-                print(f"[WARN] Unexpected: field {field.name}={val} shouldn't have been longer than {deflen} chars. Truncating to val[0:deflen]")
+                print(f"[WARN] Unexpected: field {field.name}={val} shouldn't have been longer than {deflen} chars. Truncating to {val[0:deflen]}")
                 val = val[0:deflen]
 
             field_l.append(val)
