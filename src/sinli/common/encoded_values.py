@@ -17,7 +17,7 @@ class BasicType(Enum):
     #LIST_SLASH
 
 @dataclass
-class FieldCodes:
+class EncodedField:
 
     _decoder = {}
     _describer = {}
@@ -34,10 +34,10 @@ class FieldCodes:
             self._describer[field.default[0]] = field.default[1]
             self._describer[field.name] = field.default[1]
 
-# ↓  Definition of SINLI Field Codes ↓ #
+# ↓  Definition of SINLI Encoded Fields ↓ #
 
 @dataclass(frozen = True)
-class Binding(FieldCodes):
+class Binding(EncodedField):
     TELA = ("01", "Tela")
     CARTONE = ("02", "Cartoné")
     RUSTICA = ("03", "Rústica")
@@ -50,7 +50,7 @@ class Binding(FieldCodes):
     OTROS = ("10", "Otros")
 
 @dataclass(frozen = True)
-class TBRegion(FieldCodes):
+class TBRegion(EncodedField):
     NONE = ("00", "Sin asignación a Comunidad Autónoma concreta")
     AN = ("01", "ANDALUCÍA")
     AR = ("02", "ARAGÓN")
@@ -74,7 +74,7 @@ class TBRegion(FieldCodes):
     ALL = ("99", "Asignado a todas las Comunidades Autónomas")
 
 @dataclass(frozen = True)
-class Status(FieldCodes):
+class Status(EncodedField):
     AVAILABLE = ("0", "Disponible")
     SOON = ("1", "Sin existencias pero disponible a corto plazo")
     EXHAUSTED = ("2", "Sin existencias indefinidamente")
@@ -87,7 +87,7 @@ class Status(FieldCodes):
     DISCONTINUED = ("9", "Descatalogado")
 
 @dataclass(frozen = True)
-class ReadLevel(FieldCodes):
+class ReadLevel(EncodedField):
     NONE = ("0", "Sin calificar")
     AGE_0 = ("1", "De 0 a 4 años")
     AGE_5 = ("2", "De 5 a 6 años")
@@ -96,7 +96,7 @@ class ReadLevel(FieldCodes):
     AGE_11 = ("5", "De 11 a 12 años")
 
 @dataclass(frozen = True)
-class Audience(FieldCodes):
+class Audience(EncodedField):
     NONE = ("000", "Sin calificar")
     KIDS = ("100", "Infantil hasta 12 años")
     TEEN = ("200", "Juvenil de 13 a 15 años")
@@ -104,7 +104,7 @@ class Audience(FieldCodes):
     GENERIC = ("400", "General")
 
 @dataclass(frozen = True)
-class ProductType(FieldCodes):
+class ProductType(EncodedField):
     NONE = ("00", "sin calificar")
     BOOK = ("10", "libro")
     AUDIO = ("20", "audio")
@@ -114,29 +114,29 @@ class ProductType(FieldCodes):
     OTHER = ("60", "otros")
 
 @dataclass(frozen = True)
-class InvoiceOrNote(FieldCodes):
+class InvoiceOrNote(EncodedField):
     NOTE = ("A", "Albarán")
     INVOICE = ("F", "Factura")
 
 @dataclass(frozen = True)
-class ConsignmentType(FieldCodes):
+class ConsignmentType(EncodedField):
     FIRM = ("F", "Firme")
     DEPOSIT = ("D", "Depósito")
     DEPOSIT_FEE = ("C", "Cargo al depósito")
     GIFT = ("P", "Promoción, obsequio")
 
 @dataclass(frozen = True)
-class PriceType(FieldCodes):
+class PriceType(EncodedField):
     FIXED = ("F", "Precio final fijo")
     FREE = ("L", "Precio final libre")
 
 @dataclass(frozen = True)
-class FreePriceType(FieldCodes):
+class FreePriceType(EncodedField):
     COST = ("C", "Coste")
     RECOMMENDED = ("R", "Precio recomendado")
 
 @dataclass(frozen = True)
-class PaymentType(FieldCodes):
+class PaymentType(EncodedField):
     CASH = ("1", "Al contado")
     DAYS_30 = ("2", "A 30 días")
     DAYS_60 = ("3", "A 60 días")
@@ -145,26 +145,26 @@ class PaymentType(FieldCodes):
     OTHER = ("6", "Otras")
 
 @dataclass(frozen = True)
-class OrderType(FieldCodes):
+class OrderType(EncodedField):
     FIRM = ("N", "Normal")
     FAIRE = ("F", "Sant Jordi / Feria del libro")
     DEPOSIT = ("D", "Pedido en depósito")
     OTHER = ("O", "Otros")
 
 @dataclass(frozen = True)
-class OrderSource(FieldCodes):
+class OrderSource(EncodedField):
     STORE: () = ("N", "Normal")
     CLIENT: () = ("C", "Cliente")
 
 @dataclass(frozen = True)
-class DevolutionCause(FieldCodes):
+class DevolutionCause(EncodedField):
     DAMAGED = ("0", "Estropeados")
     OLD = ("1", "Edición desfasada")
     BAD_DELIVERY = ("2", "Incidencia en la entrega")
 
-
-class SinliCode(Enum):
-    """Wrapping enum that instantiates all codes"""
+@dataclass(frozen = True)
+class SinliCode:
+    """Wrapping class that instantiates all codes"""
 
     @classmethod
     def get(cls, name: str):
