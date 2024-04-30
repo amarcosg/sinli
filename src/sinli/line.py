@@ -1,4 +1,4 @@
-from .common.encoded_values import SinliCode as c, BasicType as t
+from .common.encoded_values import SinliCode as c, BasicType as t, EncodedField
 from enum import Enum
 from typing_extensions import Self
 from dataclasses import dataclass
@@ -73,7 +73,8 @@ class Line:
         newld = {}
         for k,v in ld.items():
             newld[k] = self.pretify(k,v)
-        return self.from_dict(newld)
+        line = self.__class__()
+        return line.from_dict(newld)
 
     # Import
     def from_dict(self, fields: {}):
@@ -131,8 +132,8 @@ class Line:
             return value # TODO understand meaning of P or E values
         elif vtype == t.CURRENCY3:
             return currencies.get(alpha_3 = value)
-        elif vtype in c:
-            return vtype.value.decode(value) or None
+        elif isinstance(vtype, EncodedField):
+            return vtype.decode(value) or None
         else:
             print(f"[WARN] Unexpected case: var {value} is of type {vtype}")
             return value
@@ -159,7 +160,7 @@ class Line:
         elif type(value) == cls.currency_class:
             if vlen == 3:  return value.alpha_3
             #elif vlen == 1: return value # TODO understand P and E values
-        elif ftype in c:
+        elif isinstance(ftype, EncodedField):
             if value == None:
                 return " "
             return value[0]
@@ -175,9 +176,10 @@ class Line:
         """
         if type(k) == cls.currency_class:
             return v.name
-        elif issubclass(v, Enum):
-            return v.value[1] or "Unknown"
-        return str(v)
+        try:
+            return v[1] or "Unknown"
+        except:
+            return str(v)
 
 class LongIdentificationLine(Line):
     def __post_init__(self):
