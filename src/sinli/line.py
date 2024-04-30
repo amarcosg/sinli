@@ -118,7 +118,7 @@ class Line:
         elif vtype == t.FLOAT:
             return float(value or '0')/100
         elif vtype == t.BOOL:
-            return True if "S" else False # "N"
+            return True if value == "S" else False # "N"
         elif vtype == t.MONTH_YEAR:
             return datetime.strptime(value or "011970", "%m%Y").date()
         elif vtype == t.DATE:
@@ -132,7 +132,7 @@ class Line:
         elif vtype == t.CURRENCY3:
             return currencies.get(alpha_3 = value)
         elif vtype in c:
-            return value # resolve code only when printing as it's not reversible
+            return vtype.value.decode(value) or None
         else:
             print(f"[WARN] Unexpected case: var {value} is of type {vtype}")
             return value
@@ -159,6 +159,10 @@ class Line:
         elif type(value) == cls.currency_class:
             if vlen == 3:  return value.alpha_3
             #elif vlen == 1: return value # TODO understand P and E values
+        elif ftype in c:
+            if value == None:
+                return " "
+            return value[0]
         else: # string, integer
             return str(value)
 
@@ -171,10 +175,8 @@ class Line:
         """
         if type(k) == cls.currency_class:
             return v.name
-        try:
-            return str(c.get(k).value[0].get(v) or c.get(k).value[0].get("??"))
-        except:
-            return str(v)
+        elif issubclass(v, Enum):
+            return v.value[1] or "Unknown"
         return str(v)
 
 class LongIdentificationLine(Line):

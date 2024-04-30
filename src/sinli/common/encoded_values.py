@@ -1,5 +1,6 @@
 from pycountry import countries, languages
 from enum import Enum, auto
+from dataclasses import dataclass, fields
 
 class BasicType(Enum):
     MONTH_YEAR=auto(), # MMAAAA
@@ -15,7 +16,155 @@ class BasicType(Enum):
     #LIST_SEMICOLON
     #LIST_SLASH
 
+@dataclass
+class FieldCodes:
+
+    _decoder = {}
+    _describer = {}
+
+    def decode(self, code: str):
+        return self._decoder.get(code)
+
+    def describe(self, key: str):
+        return self._describer.get(key)
+
+    def __post_init__(self):
+        for field in fields(self):
+            self._decoder[field.default[0]] = field.default
+            self._describer[field.default[0]] = field.default[1]
+            self._describer[field.name] = field.default[1]
+
+# ↓  Definition of SINLI Field Codes ↓ #
+
+@dataclass(frozen = True)
+class Binding(FieldCodes):
+    TELA = ("01", "Tela")
+    CARTONE = ("02", "Cartoné")
+    RUSTICA = ("03", "Rústica")
+    BOLSILLO = ("04", "Bolsillo")
+    TROQUELADO = ("05", "Troquelado")
+    ESPIRAL = ("06", "Espiral")
+    ANILLAS = ("07", "Anillas")
+    GRAPADO = ("08", "Grapado")
+    FASCICULO = ("09", "Fascículo encuadernable")
+    OTROS = ("10", "Otros")
+
+@dataclass(frozen = True)
+class TBRegion(FieldCodes):
+    NONE = ("00", "Sin asignación a Comunidad Autónoma concreta")
+    AN = ("01", "ANDALUCÍA")
+    AR = ("02", "ARAGÓN")
+    AS = ("03", "PRINCIPADO DE ASTURIAS")
+    IB = ("04", "ISLAS BALEARES")
+    CN = ("05", "CANARIAS")
+    CB = ("06", "CANTABRIA")
+    CM = ("07", "CASTILLA-LA MANCHA")
+    CL = ("08", "CASTILLA y LEÓN")
+    CT = ("09", "CATALUÑA")
+    EX = ("10", "EXTREMADURA")
+    GA = ("11", "GALICIA")
+    MD = ("12", "MADRID")
+    MC = ("13", "REGIÓN DE MURCIA")
+    NC = ("14", "NAVARRA")
+    PV = ("15", "PAÍS VASCO")
+    RI = ("16", "LA RIOJA")
+    VC = ("17", "COMUNIDAD VALENCIANA")
+    CE = ("18", "CIUDAD DE CEUTA")
+    ML = ("19", "CIUDAD DE MELILLA")
+    ALL = ("99", "Asignado a todas las Comunidades Autónomas")
+
+@dataclass(frozen = True)
+class Status(FieldCodes):
+    AVAILABLE = ("0", "Disponible")
+    SOON = ("1", "Sin existencias pero disponible a corto plazo")
+    EXHAUSTED = ("2", "Sin existencias indefinidamente")
+    REPRINTING = ("3", "En reimpresión")
+    NEW = ("4", "Novedad. Próxima publicación")
+    REEDITION = ("5", "Sustituye edición antigua")
+    ON_DEMAND = ("6", "Impresión bajo demanda 1x1")
+    ALIEN = ("7", "No pertenece a nuestro fondo o no identificado")
+    EXHAUSTED_TMP = ("8", "Agotado")
+    DISCONTINUED = ("9", "Descatalogado")
+
+@dataclass(frozen = True)
+class ReadLevel(FieldCodes):
+    NONE = ("0", "Sin calificar")
+    AGE_0 = ("1", "De 0 a 4 años")
+    AGE_5 = ("2", "De 5 a 6 años")
+    AGE_7 = ("3", "De 7 a 8 años")
+    AGE_9 = ("4", "De 9 a 10 años")
+    AGE_11 = ("5", "De 11 a 12 años")
+
+@dataclass(frozen = True)
+class Audience(FieldCodes):
+    NONE = ("000", "Sin calificar")
+    KIDS = ("100", "Infantil hasta 12 años")
+    TEEN = ("200", "Juvenil de 13 a 15 años")
+    TEXT = ("300", "Textos")
+    GENERIC = ("400", "General")
+
+@dataclass(frozen = True)
+class ProductType(FieldCodes):
+    NONE = ("00", "sin calificar")
+    BOOK = ("10", "libro")
+    AUDIO = ("20", "audio")
+    VIDEO = ("30", "video")
+    CD = ("40", "cd-rom")
+    DVD = ("50", "dvd")
+    OTHER = ("60", "otros")
+
+@dataclass(frozen = True)
+class InvoiceOrNote(FieldCodes):
+    NOTE = ("A", "Albarán")
+    INVOICE = ("F", "Factura")
+
+@dataclass(frozen = True)
+class ConsignmentType(FieldCodes):
+    FIRM = ("F", "Firme")
+    DEPOSIT = ("D", "Depósito")
+    DEPOSIT_FEE = ("C", "Cargo al depósito")
+    GIFT = ("P", "Promoción, obsequio")
+
+@dataclass(frozen = True)
+class PriceType(FieldCodes):
+    FIXED = ("F", "Precio final fijo")
+    FREE = ("L", "Precio final libre")
+
+@dataclass(frozen = True)
+class FreePriceType(FieldCodes):
+    COST = ("C", "Coste")
+    RECOMMENDED = ("R", "Precio recomendado")
+
+@dataclass(frozen = True)
+class PaymentType(FieldCodes):
+    CASH = ("1", "Al contado")
+    DAYS_30 = ("2", "A 30 días")
+    DAYS_60 = ("3", "A 60 días")
+    DAYS_90 = ("4", "A 90 días")
+    DAYS_120 = ("5", "A 120 días")
+    OTHER = ("6", "Otras")
+
+@dataclass(frozen = True)
+class OrderType(FieldCodes):
+    FIRM = ("N", "Normal")
+    FAIRE = ("F", "Sant Jordi / Feria del libro")
+    DEPOSIT = ("D", "Pedido en depósito")
+    OTHER = ("O", "Otros")
+
+@dataclass(frozen = True)
+class OrderSource(FieldCodes):
+    STORE: () = ("N", "Normal")
+    CLIENT: () = ("C", "Cliente")
+
+@dataclass(frozen = True)
+class DevolutionCause(FieldCodes):
+    DAMAGED = ("0", "Estropeados")
+    OLD = ("1", "Edición desfasada")
+    BAD_DELIVERY = ("2", "Incidencia en la entrega")
+
+
 class SinliCode(Enum):
+    """Wrapping enum that instantiates all codes"""
 
     @classmethod
     def get(cls, name: str):
@@ -24,121 +173,17 @@ class SinliCode(Enum):
         except:
             return None
 
-    BINDING =  {
-        "??": "Sin especificar",
-        "01": "Tela",
-        "02": "Cartoné",
-        "03": "Rústica",
-        "04": "Bolsillo",
-        "05": "Troquelado",
-        "06": "Espiral",
-        "07": "Anillas",
-        "08": "Grapado",
-        "09": "Fascículo encuadernable",
-        "10": "Otros",
-    },
-    TB_REGION = {
-        "??": "Sin especificar",
-        "00": "Sin asignación a Comunidad Autónoma concreta",
-        "01": "ANDALUCÍA",
-        "02": "ARAGÓN",
-        "03": "PRINCIPADO DE ASTURIAS",
-        "04": "ISLAS BALEARES",
-        "05": "CANARIAS",
-        "06": "CANTABRIA",
-        "07": "CASTILLA-LA MANCHA",
-        "08": "CASTILLA y LEÓN",
-        "09": "CATALUÑA",
-        "10": "EXTREMADURA",
-        "11": "GALICIA",
-        "12": "MADRID",
-        "13": "REGIÓN DE MURCIA",
-        "14": "NAVARRA",
-        "15": "PAÍS VASCO",
-        "16": "LA RIOJA",
-        "17": "COMUNIDAD VALENCIANA",
-        "18": "CIUDAD DE CEUTA",
-        "19": "CIUDAD DE MELILLA",
-        "99": "Asignado a todas las Comunidades Autónomas",
-    },
-    STATUS = {
-        "0": "Disponible",
-        "1": "Sin existencias pero disponible a corto plazo",
-        "2": "Sin existencias indefinidamente",
-        "3": "En reimpresión",
-        "4": "Novedad. Próxima publicación",
-        "5": "Sustituye edición antigua",
-        "6": "Impresión bajo demanda 1x1",
-        "7": "No pertenece a nuestro fondo o no identificado",
-        "8": "Agotado",
-        "9": "Descatalogado",
-    },
-    READ_LEVEL = {
-        "0": "Sin calificar",
-        "1": "De 0 a 4 años",
-        "2": "De 5 a 6 años",
-        "3": "De 7 a 8 años",
-        "4": "De 9 a 10 años",
-        "5": "De 11 a 12 años",
-    },
-    AUDIENCE = {
-        "000": "Sin calificar",
-        "100": "Infantil hasta 12 años",
-        "200": "Juvenil de 13 a 15 años",
-        "300": "Textos",
-        "400": "General",
-    },
-    PRODUCT_TYPE = {
-        "00": "sin calificar",
-        "10": "libro",
-        "20": "audio",
-        "30": "video",
-        "40": "cd-rom",
-        "50": "dvd",
-        "60": "otros",
-    },
-    INVOICE_OR_NOTE = {
-        "A": "Albarán",
-        "F": "Factura"
-    },
-    CONSIGNMENT_TYPE = {
-        "F": "Firme",
-        "D": "Depósito",
-        "C": "Cargo al depósito",
-        "P": "Promoción, obsequio"
-    },
-    PRICE_TYPE = {
-        "F": "Precio final fijo",
-        "L": "Precio final libre",
-        "??": ""
-    },
-    FREE_PRICE_TYPE = {
-        "C": "Coste",
-        "R": "Precio recomendado",
-        "??": ""
-    },
-    PAYMENT_TYPE = {
-        "1": "Al contado",
-        "2": "A 30 días",
-        "3": "A 60 días",
-        "4": "A 90 días",
-        "5": "A 120 días",
-        "6": "Otras",
-        "??": "Sin especificar"
-    },
-    ORDER_TYPE = {
-        "N": "Normal",
-        "F": "Sant Jordi / Feria del libro",
-        "D": "Pedido en depósito",
-        "O": "Otros"
-    },
-    ORDER_SOURCE = {
-        "N": "Normal",
-        "C": "Cliente",
-    },
-
-    DEVOLUTION_CAUSE= {
-        "0": "Estropeados", 
-        "1": "Edición desfasada",
-        "2": "Incidencia en la entrega" 
-    }
+    BINDING = Binding()
+    TB_REGION = TBRegion()
+    STATUS = Status()
+    READ_LEVEL = ReadLevel()
+    AUDIENCE = Audience()
+    PRODUCT_TYPE = ProductType()
+    INVOICE_OR_NOTE = InvoiceOrNote()
+    CONSIGNMENT_TYPE = ConsignmentType()
+    PRICE_TYPE = PriceType()
+    FREE_PRICE_TYPE = FreePriceType()
+    PAYMENT_TYPE = PaymentType()
+    ORDER_TYPE = OrderType()
+    ORDER_SOURCE = OrderSource()
+    DEVOLUTION_CAUSE = DevolutionCause()
