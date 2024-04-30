@@ -4,7 +4,7 @@ from typing_extensions import Self
 from dataclasses import dataclass
 from pycountry import countries, languages, currencies
 from datetime import date
-import datetime
+from datetime import datetime
 
 @dataclass(repr=False)
 class Line:
@@ -120,9 +120,9 @@ class Line:
         elif vtype == t.BOOL:
             return True if "S" else False # "N"
         elif vtype == t.MONTH_YEAR:
-            return datetime.datetime.strptime(value or "011970", "%m%Y").date()
+            return datetime.strptime(value or "011970", "%m%Y").date()
         elif vtype == t.DATE:
-            return datetime.datetime.strptime(value or "19700101", "%Y%m%d").date()
+            return datetime.strptime(value or "19700101", "%Y%m%d").date()
         elif vtype == t.LANG:
             return languages.get(alpha_3 = value)
         elif vtype == t.COUNTRY:
@@ -142,6 +142,8 @@ class Line:
         """
         Convert an attribute from an object to a string, appendable to a sinli line
         """
+        if type(value) == datetime:
+            value = value.date()
         if type(value) == float:
             return str(int(value * 100))
         elif type(value) == date:
