@@ -39,11 +39,11 @@ class Line:
         field_l = []
         for field in self.Field:
             deflen = field.value[1]
-            val = self.encode(deflen, getattr(self, field.name))
+            f_type = field.value[2]
+            val = self.encode(deflen, getattr(self, field.name), f_type)
             vallen = len(val)
 
             if vallen < deflen:
-                f_type = field.value[2]
                 if f_type in [t.INT, t.FLOAT]:
                     padding = "0" # pad left with zeroes
                     val = "".join([padding for i in range(0, deflen-vallen)]) + val
@@ -138,7 +138,7 @@ class Line:
             return value
 
     @classmethod
-    def encode(cls, vlen, value) -> str:
+    def encode(cls, vlen, value, ftype) -> str:
         """
         Convert an attribute from an object to a string, appendable to a sinli line
         """
