@@ -1,10 +1,10 @@
-from .common.encoded_values import SinliCode as c, BasicType as t
+from .common.encoded_values import SinliCode as c, BasicType as t, EncodedField
 from enum import Enum
 from typing_extensions import Self
 from dataclasses import dataclass
 from pycountry import countries, languages, currencies
 from datetime import date
-import datetime
+from datetime import datetime
 
 @dataclass(repr=False)
 class Line:
@@ -39,11 +39,11 @@ class Line:
         field_l = []
         for field in self.Field:
             deflen = field.value[1]
-            val = self.encode(deflen, getattr(self, field.name))
+            f_type = field.value[2]
+            val = self.encode(deflen, getattr(self, field.name), f_type)
             vallen = len(val)
 
             if vallen < deflen:
-                f_type = field.value[2]
                 if f_type in [t.INT, t.FLOAT]:
                     padding = "0" # pad left with zeroes
                     val = "".join([padding for i in range(0, deflen-vallen)]) + val
@@ -51,7 +51,7 @@ class Line:
                     padding = " " # pad right with spaces
                     val = val + "".join([padding for i in range(0, deflen-vallen)])
             elif vallen > deflen: # truncate
-                print(f"[WARN] Unexpected: field {field.name}={val} shouldn't have been longer than {deflen} chars. Truncating to val[0:deflen]")
+                print(f"[WARN] Unexpected: field {field.name}={val} shouldn't have been longer than {deflen} chars. Truncating to {val[0:deflen]}")
                 val = val[0:deflen]
 
             field_l.append(val)
@@ -73,7 +73,8 @@ class Line:
         newld = {}
         for k,v in ld.items():
             newld[k] = self.pretify(k,v)
-        return self.from_dict(newld)
+        line = self.__class__()
+        return line.from_dict(newld)
 
     # Import
     def from_dict(self, fields: {}):
@@ -91,7 +92,15 @@ class Line:
             start = field.value[0]
             end = start + field.value[1]
             vtype = field.value[2]
-            line_dict[field.name] = cls.decode(vtype, line_s[start:end].strip())
+            try:
+                line_dict[field.name] = cls.decode(vtype, line_s[start:end].strip())
+            except ValueError as err:
+                print(f"[ERROR] Decode error. {field} with value \"{line_s[start:end]}\" can't be converted to a float or int.", err)
+                line_dict[field.name] = 0
+            except NameError as err:
+                print(f"[ERROR] Decode error. {field} with value \"{line_s[start:end]}\" can't be converted to a language, currency or country.", err)
+                line_dict[field.name] = None
+
             print(f"[DEBUG] {field} → {line_dict[field.name]}")
         line = cls()
         return line.from_dict(line_dict)
@@ -110,11 +119,11 @@ class Line:
         elif vtype == t.FLOAT:
             return float(value or '0')/100
         elif vtype == t.BOOL:
-            return True if "S" else False # "N"
+            return True if value == "S" else False # "N"
         elif vtype == t.MONTH_YEAR:
-            return datetime.datetime.strptime(value or "011970", "%m%Y").date()
+            return datetime.strptime(value or "011970", "%m%Y").date()
         elif vtype == t.DATE:
-            return datetime.datetime.strptime(value or "19700101", "%Y%m%d").date()
+            return datetime.strptime(value or "19700101", "%Y%m%d").date()
         elif vtype == t.LANG:
             return languages.get(alpha_3 = value)
         elif vtype == t.COUNTRY:
@@ -123,17 +132,19 @@ class Line:
             return value # TODO understand meaning of P or E values
         elif vtype == t.CURRENCY3:
             return currencies.get(alpha_3 = value)
-        elif vtype in c:
-            return value # resolve code only when printing as it's not reversible
+        elif isinstance(vtype, EncodedField):
+            return vtype.decode(value) or None
         else:
             print(f"[WARN] Unexpected case: var {value} is of type {vtype}")
             return value
 
     @classmethod
-    def encode(cls, vlen, value) -> str:
+    def encode(cls, vlen, value, ftype) -> str:
         """
         Convert an attribute from an object to a string, appendable to a sinli line
         """
+        if type(value) == datetime:
+            value = value.date()
         if type(value) == float:
             return str(int(value * 100))
         elif type(value) == date:
@@ -149,6 +160,10 @@ class Line:
         elif type(value) == cls.currency_class:
             if vlen == 3:  return value.alpha_3
             #elif vlen == 1: return value # TODO understand P and E values
+        elif isinstance(ftype, EncodedField):
+            if value == None:
+                return " "
+            return value[0]
         else: # string, integer
             return str(value)
 
@@ -162,10 +177,9 @@ class Line:
         if type(k) == cls.currency_class:
             return v.name
         try:
-            return str(c.get(k).value[0].get(v) or c.get(k).value[0].get("??"))
+            return v[1] or "Unknown"
         except:
             return str(v)
-        return str(v)
 
 class LongIdentificationLine(Line):
     def __post_init__(self):

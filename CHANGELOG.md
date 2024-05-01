@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2024-05-01
+
+### Changed
+
+- Manage non-text values errors when parsings fields from a Line
+- Fix bug on parsing document from string
+- Refactor SinliCode:
+  - replace Enum with dataclass
+  - each encoded type has now its own class that inherits from EncodedField
+  - when parsing lines, the field is saved as an EncodedField instead of its
+      raw value
+  - we can compare and set values with meaningful and autocompletable names,
+      like `ORDERSOURCE.CLIENT` instead of `"C"`
+- Fix bug on Document.to_readable(). Now, the result is a complete new document
+    that doesn't reference to the original. This is important because readable
+    fields can't be converted back nor serialized to sinli strings.
+
 ## [1.1.5] - 2024-04-10
 
 ### Added
