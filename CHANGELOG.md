@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1] - 2024-05-05
+
+### Changed
+
+- Fix bug. Of all SinliCode, only ORDER_SOURCE was being recognized. We need to add a typing to attributes so that @dataclass considers them as fields.
+
 ## [1.2.0] - 2024-05-01
 
 ### Changed

@@ -51,6 +51,7 @@ d = Document.from_filename("/path/to/document.sinli")
 Generate a SINLI document
 ```python
 from sinli import *
+from sinli.common import SinliCode as c
 from stdnum import isbn
 
 # Create a catalog document
@@ -67,8 +68,8 @@ header.PROVIDER = "Traficantes de Sueños"
 header.CURRENCY = "E"
 
 catalog.doc_lines.append(header)
-                                                                               
-# Create one book for the catalog document                                     
+
+# Create one book for the catalog document
 book = libros.v9.LibrosDoc.Book()
 
 book.EAN = "9788494597879"
@@ -78,7 +79,7 @@ book.TITLE_FULL = "Horizontes comunitario-populares"
 book.PRICE_PV = 12.00
 book.TAX_IVA = 4.00
 book.PRICE_PVP = book.PRICE_PV / (1 + book.TAX_IVA / 100) # precio sin IVA
-book.PRICE_TYPE = "F"
+book.PRICE_TYPE = c.PRICE_TYPE.FIXED
 
 catalog.doc_lines.append(book)
 
@@ -142,7 +143,7 @@ print(f"Send email with subject '{subject}'")
 ### For bookshops
 
 - [x] Albarán de pedido del cliente
-- [ ] Albarán de devolución
+- [x] Albarán de devolución
 - [x] Mensaje de texto
 
 ### For distributors
