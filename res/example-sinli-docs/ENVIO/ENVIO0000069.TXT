@@ -1,0 +1,15 @@
+INENVIO 06LIB00069L1234567000150000070                                     FANDE
+ISINLI@RHM.ES                                      libreria@example.org                              ENVIO 0600000069
+CPENGUIN RANDOM HOUSE GRUPO EDITORIAL    LIBRERIA DE EJEMPLO                     011614604020240410ADN0000000000E
+D978-84-19259-47-99788419259479     VT5947A        EXPEDICIO AL SOSTRE DE VIDRE                      0000040000002106000000219000350000400NF00000000S.JORDI24 DURAN, MARTA/SEGARRA, ARACELI
+T0000000400000084240000005477
+V0040000000054770000000221000000000000000
+E                 9788466372022                    HIJOS DE DUNE (DELUXE ED. LIMITADA)               1S20991231
+E                 9788466363402                    DUNE (FG)(DELUXE ED.LIMITADA)                     1S20991231
+E                 9788466372015                    MESIAS DE DUNE, EL (DELUXE ED. LIMITADA)          1S20991231
+E                 9788418897900                    LABERINTOS 2                                      1S20991231
+E                 9788426427007                    SILENCIO DEL AGUA, EL                             1S20991231
+E                 9788466373852                    HABITACION PROPIA, UNA (NUEVA TRADUCCION          8N20991231
+E                 9788419245779                    MODISTA DE GRACIA, LA                             1S20991231
+E                 9788416310050                    ARAB DEL FUTUR, L' 1 (CATALA)                     1S20991231
+E                 9788494425776                    LEÑADORAS 1. CUIDADO CON EL GATETE SAGRA          1S20991231

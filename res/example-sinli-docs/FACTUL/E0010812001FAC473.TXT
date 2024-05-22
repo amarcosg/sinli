@@ -1,0 +1,7 @@
+INFACTUL01L0004643L1234567000000000000                                     FANDE
+Isinli.lasombra@arminet.es                         libreria@example.org                              FACTUL01        
+CLa Sombra de Caín                       ASSOCIACIO ACCIO CULTURAL DE BARCELONA        452820240430E
+D       471202404300000001400
+E       4710040000000013460000000054000000000000000
+T0000001400
+V0040000000013460000000054000000000000000
