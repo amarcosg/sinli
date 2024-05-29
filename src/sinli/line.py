@@ -161,7 +161,7 @@ class Line:
             if vlen == 3:  return value.alpha_3
             #elif vlen == 1: return value # TODO understand P and E values
         elif isinstance(ftype, EncodedField):
-            if value == None:
+            if value == None or value == "":
                 return " "
             return value[0]
         else: # string, integer
