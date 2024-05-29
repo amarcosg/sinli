@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.2] - 2024-05-29
+
+### Fixed
+
+- Fix bug. Handle empty fields that are EncodedType in Book() class.
+
 ## [1.2.1] - 2024-05-05
 
 ### Changed
