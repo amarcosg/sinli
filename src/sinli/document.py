@@ -101,13 +101,14 @@ class Document:
         return doc
 
     @classmethod
-    def from_filename(cls, filename: str) -> Self:
+    def from_filename(cls, filename: str, encoding="windows-1252") -> Self:
         """
         El juego de caracteres recomendado es el 850 OEM – Multilingual Latín I // (DOS Latin 1 = CP 850)
         https://docs.python.org/3/library/codecs.html#module-codecs
+        A la práctica creemos que se usa sobretodo ISO-8859-15 y windows-1252
         """
         doc = cls()
-        with open(filename, encoding="cp850") as f:
+        with open(filename, encoding=encoding) as f:
             for line in f:
                 line = line.strip()
                 doc = cls.consume_line(line, doc)
