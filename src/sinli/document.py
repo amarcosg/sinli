@@ -2,7 +2,7 @@ from io import open
 import os
 import json
 from enum import Enum
-from typing import List
+from typing import List, Dict
 
 # typing
 from typing_extensions import Self
@@ -16,8 +16,8 @@ class Document:
     long_id_line: LongIdentificationLine = field(default_factory=LongIdentificationLine)
     short_id_line: ShortIdentificationLine = field(default_factory=ShortIdentificationLine)
     doc_lines: List[Line] = field(default_factory=list)
+    lines_by_type: Dict[str, Line] = field(default_factory=dict)
     linemap = {}
-    doctype_codes = {}
     doctype_code = ""
     version_code = ""
 
@@ -35,15 +35,8 @@ class Document:
         for doctype in DocumentType:
             name = doctype.name
             version_map = doctype.value[1]
-            if not version_map: continue
-            if version_map['??'] == self.__class__:
-                self.doctype_code = name
 
         self.version_code = self.get_doctype_version()
-        self.long_id_line.DOCTYPE = self.doctype_code
-        self.long_id_line.VERSION = self.version_code
-        self.short_id_line.DOCTYPE = self.doctype_code
-        self.short_id_line.VERSION = self.version_code
 
     def consume_line(line: str, doc: Self) -> Self:
         print(f"\n[DEBUG] line: '{line}'")
@@ -59,6 +52,7 @@ class Document:
             doctype_str = doc.short_id_line.DOCTYPE if hasattr(doc, "short_id_line") else ""
 
             if doctype_str: # we just processed the short identification line
+                doc.doctype_code = doctype_str
                 from .doctype import DocumentType
                 doctype_tup = DocumentType[doctype_str]
                 doctype_class = doctype_tup.value[1].get(version_str)
@@ -82,7 +76,14 @@ class Document:
                     "SINLI syntax error", f"El codi de registre {tdoc} no es reconeix i no s'ha definit cap classe sense prefix"
                 )
         # we have a valid lineclass already
-        doc.doc_lines.append(lineclass.from_str(line))
+        docline = lineclass.from_str(line)
+        doc.doc_lines.append(docline)
+
+        # put line in doc dictionary by line type
+        if not doc.lines_by_type.get(lineclass.__name__):
+            doc.lines_by_type[lineclass.__name__] = []
+        doc.lines_by_type[lineclass.__name__].append(docline)
+
         return doc
 
     def consume_lines(lines, doc) -> Self:
@@ -119,7 +120,9 @@ class Document:
         new_doc = cls()
         new_doc.long_id_line = doc.long_id_line
         new_doc.short_id_line = doc.short_id_line
+        new_doc.doctype_code = doc.doctype_code
         new_doc.doc_lines = doc.doc_lines
+        new_doc.lines_by_type = doc.lines_by_type
         return new_doc
 
     def __str__(self) -> str:
