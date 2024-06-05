@@ -1,0 +1,9 @@
+INENVIO 06LIB00069L1234567000090000069                                     FANDE
+ISINLI@RHM.ES                                      libreria@example.org                              ENVIO 0600000068
+CPENGUIN RANDOM HOUSE GRUPO EDITORIAL    LIBRERIA DE EJEMPLO                     011613235720240408AFN0000000000E
+D978-84-17417-69-79788417417697     CT17697        JARROA                                            0000010000001529000000159000350000400NF00000000          FERNANDEZ PLATA, ANDREA
+T0000000100000015290000000994
+V0040000000009940000000040000000000000000
+E                 9788419951380                    COMO LAS GRECAS                                   1S20991231
+E                 9788419260185                    SALTONAUTAS                                       1S20991231
+E                 9788419642462                    SED, LA                                           8N20991231

@@ -1,0 +1,5 @@
+INESTADO04LIB00069L1234567000050000217                                     FANDE
+ISINLI@RHM.ES                                      libreria@example.org                              ESTADO0400000216
+CPENGUIN RANDOM HOUSE GRUPO EDITORIAL
+E978-84-17910-49-59788417910495     RK10495        MACANUDO 14                                       420240426
+E978-84-19940-76-69788419940766     RK40766        MACANUDO 15                                       420240426

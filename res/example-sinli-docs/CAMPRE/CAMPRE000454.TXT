@@ -1,0 +1,5 @@
+INCAMPRE02LIB00069L1234567000050000455                                     FANDE
+ISINLI@RHM.ES                                      libreria@example.org                              CAMPRE0200000454
+CPENGUIN RANDOM HOUSE GRUPO EDITORIAL    20240423E
+D200-0            2000100265000     X642650        0000008611000000895500400EXPOSITOR BLUEY CAT                     F
+D200-9            2000100265109     X642651        0000012620000001312500400EXPOSITOR BLUEY CAST                    F
