@@ -86,13 +86,11 @@ class Document:
 
         return doc
 
-    def consume_lines(lines, doc) -> Self:
-        first = True
+    @classmethod
+    def consume_lines(cls, lines) -> Self:
+        doc = cls()
         for line in lines:
-            if first:
-                first = False
-                continue
-            doc = consume_line(line, doc)
+            doc = cls.consume_line(line.strip(), doc)
         return doc
 
     @classmethod
