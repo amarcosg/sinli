@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [1.2.4] - 2024-06-05
+
+### Changed
+
+- Add to `Document.from_filename()` an optional `encoding` argument
+
+
+### Fixed
+
+- Fix `Document.from_str()`. It was totally not working. It is now.
+
+
 ## [1.2.3] - 2024-06-05
 
 ### Added
