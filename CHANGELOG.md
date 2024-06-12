@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.5] - 2024-06-12
+
+### Fixed
+
+- Document.from_str(sinli_document_in_string) is fixed now.
+
+### Changed
+
+- Update contact email at pyproject.toml
 
 ## [1.2.4] - 2024-06-05
 

@@ -1,12 +1,12 @@
 [project]
 name = "sinli"
-version = "1.2.4"
+version = "1.2.5"
 dependencies = [
     "typing-extensions==4.3.0",
     "pycountry==22.3.5"
 ]
 authors = [
-    {name = "Devcontrol", email = "devcontrol@zici.fr"},
+    {name = "Devcontrol", email = "devcontrol@sindominio.net"},
 ]
 description = "Implementation of the SINLI format. It is used in the book sector in Spain to express commercial operations between book sellers, distributors and editors"
 readme = "README.md"
