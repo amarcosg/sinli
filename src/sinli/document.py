@@ -36,8 +36,7 @@ class Document:
             name = doctype.name
             version_map = doctype.value[1]
             if not version_map: continue
-            if version_map['??'] == self.__class__:
-                self.doctype_code = name
+            self.doctype_code = name
 
         self.version_code = self.get_doctype_version()
         self.long_id_line.DOCTYPE = self.doctype_code
