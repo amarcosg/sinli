@@ -21,6 +21,15 @@ class Document:
     doctype_code = ""
     version_code = ""
 
+    def get_doctype_name(self) -> str:
+        """
+        Produces the sinli name string, like "09"
+        from the package of the instance class, such as sinli.libros.v9
+        """
+        pkg = self.__class__.__module__
+        name_code = pkg.split('.')[-2]
+        return name_code.upper()
+
     def get_doctype_version(self) -> str:
         """
         Produces the sinli version string, like "09"
@@ -33,12 +42,11 @@ class Document:
     def __post_init__(self):
         from .doctype import DocumentType
         for doctype in DocumentType:
-            name = doctype.name
+            # name = doctype.name
             version_map = doctype.value[1]
             if not version_map: continue
-            self.doctype_code = name
-
         self.version_code = self.get_doctype_version()
+        self.doctype_code = self.get_doctype_name()
         self.long_id_line.DOCTYPE = self.doctype_code
         self.long_id_line.VERSION = self.version_code
         self.short_id_line.DOCTYPE = self.doctype_code
