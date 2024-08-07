@@ -16,8 +16,9 @@ class DocumentType(Enum):
         "??": libros.v9.LibrosDoc
     })  # noqa: F405
     PEDIDO = ("Albarán de pedido del cliente", {
+        "06": pedido.v6.PedidoDoc,
         "07": pedido.v7.PedidoDoc,
-        "??": pedido.v7.PedidoDoc
+        "??": pedido.v7.PedidoDoc,
     })
     ENVIO = ("Albarán de envío de distribuidora", {
         "08": envio.v8.EnvioDoc,
