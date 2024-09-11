@@ -39,6 +39,12 @@ class Document:
         self.version_code = self.get_doctype_version()
 
     def consume_line(line: str, doc: Self) -> Self:
+
+        # files can have empty lines at the end of the document.
+        # Just ignore all empty lines without complaining
+        if not line:
+            return None
+
         print(f"\n[DEBUG] line: '{line}'")
 
         tdoc = line[0:1]
