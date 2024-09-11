@@ -40,7 +40,7 @@ class LibrosDoc(Document):
             PRICE_PVP = (589, 10, t.FLOAT, "PVP sin IVA en EUR (sin puntuación)")
             PRICE_PV = (599, 10, t.FLOAT, "PV con IVA en EUR (sin puntuación)")
             TAX_IVA = (609, 5, t.FLOAT, "Porcentaje de IVA (ej: 4, 16, 21, ...)")
-            PRICE_TYPE = (614, 1, t.STR, "Tipo de precio. F = Fijo, L = Libre. Si es L, el precio sin IVA será el precio de cesión, y el precio con IVA, el precio de sesión más el IVA correspondiente")
+            PRICE_TYPE = (614, 1, c.PRICE_TYPE, "Tipo de precio. F = Fijo, L = Libre. Si es L, el precio sin IVA será el precio de cesión, y el precio con IVA, el precio de sesión más el IVA correspondiente")
             COLLECTION = (615, 40, t.STR, "Nombre de la colección")
             COL_NUM = (655, 10, t.STR, "Número de colección")
             VOL_NUM = (665, 4, t.STR, "Número de volumen")

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Changed LibrosDoc.Book.PRICE_TYPE's type from string to an existing encoded type, as it should be.
+
 ## [1.2.5] - 2024-06-12
 
 ### Fixed
