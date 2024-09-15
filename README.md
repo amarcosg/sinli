@@ -74,7 +74,7 @@ book = libros.v9.LibrosDoc.Book()
 
 book.EAN = "9788494597879"
 book.ISBN_INVOICE = isbn.format(book.EAN)
-book.AUTHOR_NAME = "Raquel Gutiérrez Aguilar"
+book.AUTHORS = "Raquel Gutiérrez Aguilar"
 book.TITLE_FULL = "Horizontes comunitario-populares"
 book.PRICE_PV = 12.00
 book.TAX_IVA = 4.00
