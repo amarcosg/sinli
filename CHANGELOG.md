@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix parsing error of empty lines, common at the end of the sinli message files.
+- Changed LibrosDoc.Book.PRICE_TYPE's type from string to an existing encoded type, as it should be.
+- Fixed a misleading detail of a usage example at README.md
 
 ## [1.2.5] - 2024-06-12
 
