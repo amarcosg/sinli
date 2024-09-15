@@ -1,6 +1,6 @@
 [project]
 name = "sinli"
-version = "1.2.5"
+version = "1.2.6"
 dependencies = [
     "typing-extensions==4.3.0",
     "pycountry==22.3.5"
