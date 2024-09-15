@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix parsing error of empty lines, common at the end of the sinli message files.
+
 ## [1.2.5] - 2024-06-12
 
 ### Fixed
