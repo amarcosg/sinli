@@ -21,6 +21,7 @@ cache:
 before_script:
   - python -V  # Print out python version for debugging
   - pip install virtualenv
+  - rm -rf venv
   - virtualenv venv
   - source venv/bin/activate
   - pip install wheel build
