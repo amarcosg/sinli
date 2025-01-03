@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed bug in python 3.13: "cannot inherit frozen dataclass from a non-frozen one"
+
 ## [1.2.6] - 2024-09-15
 
 ### Fixed

@@ -16,7 +16,7 @@ class BasicType(Enum):
     #LIST_SEMICOLON
     #LIST_SLASH
 
-@dataclass
+@dataclass(frozen = True)
 class EncodedField:
 
     _decoder = {}
