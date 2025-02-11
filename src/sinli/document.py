@@ -38,26 +38,26 @@ class Document:
 
         self.version_code = self.get_doctype_version()
 
-    def consume_line(line: str, doc: Self) -> Self:
-
+    @classmethod
+    def consume_line(cls, line: str, doc: Self) -> Self:
         # files can have empty lines at the end of the document.
         # Just ignore all empty lines without complaining
         if not line:
-            return None
+            return doc  # Retornamos doc en lugar de None
 
         print(f"\n[DEBUG] line: '{line}'")
 
         tdoc = line[0:1]
-        if tdoc == "I" and not doc.long_id_line.FROM: # generic processing, we still don't know the doctype:  # Long id
+        if tdoc == "I" and not doc.long_id_line.FROM:
             doc.long_id_line = LongIdentificationLine.from_str(line)
             return doc
 
-        elif tdoc == "I" and not doc.short_id_line.FROM: # generic processing, we still don't know the doctype:  # Short id
+        elif tdoc == "I" and not doc.short_id_line.FROM:
             doc.short_id_line = ShortIdentificationLine.from_str(line)
-            version_str = doc.short_id_line.VERSION if hasattr(doc, "short_id_line") else "" # ex: "09"
+            version_str = doc.short_id_line.VERSION if hasattr(doc, "short_id_line") else ""
             doctype_str = doc.short_id_line.DOCTYPE if hasattr(doc, "short_id_line") else ""
 
-            if doctype_str: # we just processed the short identification line
+            if doctype_str:
                 doc.doctype_code = doctype_str
                 from .doctype import DocumentType
                 doctype_tup = DocumentType[doctype_str]
@@ -68,9 +68,7 @@ class Document:
                 newdoc = doctype_class.from_document(doc)
                 doc = newdoc
                 print(f"[DEBUG] linemap: {doc.linemap.items()}")
-
             return doc
-
         lineclass = doc.linemap.get(tdoc)
         if lineclass == None:
             lineclass = doc.linemap.get("")
@@ -150,4 +148,3 @@ class Document:
 
     def to_json(self) -> str:
         return json.dumps([line.to_readable().to_dict() for line in self.doc_lines])
-
