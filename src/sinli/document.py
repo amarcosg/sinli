@@ -148,3 +148,19 @@ class Document:
 
     def to_json(self) -> str:
         return json.dumps([line.to_readable().to_dict() for line in self.doc_lines])
+
+    def finalize_document(self, doctype_code, version_code):
+        """Finalizar documento configurando campos automáticos"""
+        # Configurar identificación corta
+        self.short_id_line.DOCTYPE = doctype_code
+        self.short_id_line.VERSION = version_code
+
+        # Configurar identificación larga
+        self.long_id_line.DOCTYPE = doctype_code
+        self.long_id_line.VERSION = version_code
+
+        # Calcular LEN
+        total_records = len(self.doc_lines) + 2
+        self.long_id_line.LEN = total_records
+
+        return self
