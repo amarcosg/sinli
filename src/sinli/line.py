@@ -146,26 +146,30 @@ class Line:
         if type(value) == datetime:
             value = value.date()
         if type(value) == float:
-            return str(int(value * 100))
+            return str(int(value * 100)).zfill(vlen)
         elif type(value) == date:
             if vlen == 6: return value.strftime("%m%Y")
             elif vlen == 8: return value.strftime("%Y%m%d")
             else: raise(f"BUG! unexpected situation to SINLI-encode {value} to a length of {vlen} bytes")
         elif type(value) == bool:
-            return "S" if value == True else "N" # value == False
+            return "S" if value == True else "N"
+        elif type(value) == int:
+            return str(value).zfill(vlen)
         elif type(value) == cls.country_class:
             return value.alpha_2
         elif type(value) == cls.lang_class:
             return value.alpha_3
         elif type(value) == cls.currency_class:
             if vlen == 3:  return value.alpha_3
-            #elif vlen == 1: return value # TODO understand P and E values
         elif isinstance(ftype, EncodedField):
             if value == None or value == "":
                 return " "
             return value[0]
         else: # string, integer
-            return str(value)
+            if isinstance(value, str):
+                return str(value).ljust(vlen)
+            else:
+                return str(value).zfill(vlen)
 
     @classmethod
     def pretify(cls, k, v) -> str:
