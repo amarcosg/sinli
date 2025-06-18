@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="sinli",
-    version="1.2.9",
+    version="1.2.10",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     install_requires=[

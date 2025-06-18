@@ -1,6 +1,8 @@
 from io import open
 import os
 import json
+import unicodedata
+import re
 from enum import Enum
 from typing import List, Dict
 
@@ -37,6 +39,46 @@ class Document:
             version_map = doctype.value[1]
 
         self.version_code = self.get_doctype_version()
+
+    @staticmethod
+    def normalize_sinli_text(text: str) -> str:
+        """
+        Normaliza texto para cumplir con estándares SINLI:
+        - Remueve acentos y diacríticos
+        - Convierte caracteres especiales del español
+        - Reemplaza espacios no estándar por espacios normales
+        - Maneja caracteres especiales comunes
+        """
+        if not text:
+            return text
+
+        # Reemplazar espacios no estándar (ASCII 160) por espacios normales (ASCII 32)
+        text = text.replace('\u00A0', ' ')  # Non-breaking space
+        text = text.replace('\u2009', ' ')  # Thin space
+        text = text.replace('\u200A', ' ')  # Hair space
+        text = text.replace('\u202F', ' ')  # Narrow no-break space
+
+        # Mapeo manual de caracteres especiales comunes en español
+        replacements = {
+            'ñ': 'n', 'Ñ': 'N',
+            'ç': 'c', 'Ç': 'C',
+            '¡': '!', '¿': '?',
+            'º': 'o', 'ª': 'a',
+            'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u',
+            'Á': 'A', 'É': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U',
+            'ü': 'u', 'Ü': 'U',
+            'à': 'a', 'è': 'e', 'ì': 'i', 'ò': 'o', 'ù': 'u',
+            'À': 'A', 'È': 'E', 'Ì': 'I', 'Ò': 'O', 'Ù': 'U'
+        }
+
+        for old, new in replacements.items():
+            text = text.replace(old, new)
+
+        # Normalizar unicode para remover acentos restantes
+        text = unicodedata.normalize('NFD', text)
+        text = ''.join(c for c in text if unicodedata.category(c) != 'Mn')
+
+        return text
 
     @classmethod
     def consume_line(cls, line: str, doc: Self) -> Self:
@@ -99,22 +141,56 @@ class Document:
 
     @classmethod
     def from_str(cls, s: str) -> Self:
+        # Normalizar terminadores de línea antes de procesar
         doctype_s = ""
         doc = cls.consume_lines(s.splitlines())
         return doc
 
     @classmethod
-    def from_filename(cls, filename: str, encoding="windows-1252") -> Self:
+    def from_filename(cls, filename: str, encoding=None, normalize_text=True) -> Self:
         """
-        El juego de caracteres recomendado es el 850 OEM – Multilingual Latín I // (DOS Latin 1 = CP 850)
-        https://docs.python.org/3/library/codecs.html#module-codecs
-        A la práctica creemos que se usa sobretodo ISO-8859-15 y windows-1252
+        Lee un archivo SINLI con el encoding correcto y normalización opcional.
+
+        Args:
+            filename: Ruta del archivo
+            encoding: Encoding a usar. Si es None, probará en orden: cp850, windows-1252, iso-8859-15, utf-8
+            normalize_text: Si True, normaliza caracteres especiales y espacios
         """
+        encodings_to_try = []
+
+        if encoding:
+            encodings_to_try = [encoding]
+        else:
+            # Orden recomendado según documentación SINLI
+            encodings_to_try = ['cp850', 'windows-1252', 'iso-8859-15', 'utf-8']
+
+        content = None
+        used_encoding = None
+
+        for enc in encodings_to_try:
+            try:
+                with open(filename, encoding=enc) as f:
+                    content = f.read()
+                    used_encoding = enc
+                    print(f"[INFO] Archivo leído correctamente con encoding: {enc}")
+                    break
+            except (UnicodeDecodeError, UnicodeError) as e:
+                print(f"[WARN] Error con encoding {enc}: {e}")
+                continue
+
+        if content is None:
+            raise ValueError(f"No se pudo leer el archivo {filename} con ninguno de los encodings probados: {encodings_to_try}")
+
+        # Normalizar texto si se solicita
+        if normalize_text:
+            content = cls.normalize_sinli_text(content)
+
         doc = cls()
-        with open(filename, encoding=encoding) as f:
-            for line in f:
-                line = line.strip()
+        for line in content.splitlines():
+            line = line.rstrip()  # Solo quitar espacios al final
+            if line:  # Ignorar líneas vacías
                 doc = cls.consume_line(line, doc)
+
         return doc
 
     @classmethod
@@ -128,12 +204,15 @@ class Document:
         return new_doc
 
     def __str__(self) -> str:
+        """
+        Exporta el documento con terminadores SINLI correctos (CR+LF)
+        """
         slines = []
         slines.append(str(self.long_id_line))
         slines.append(str(self.short_id_line))
         if len(self.doc_lines) > 0:
-            slines.append(os.linesep.join([str(line) for line in self.doc_lines]))
-        return os.linesep.join(slines)
+            slines.append('\r\n'.join([str(line) for line in self.doc_lines]))
+        return '\r\n'.join(slines)
 
     def to_readable(self) -> Self:
         new_doc = self.from_document(self)
@@ -164,3 +243,31 @@ class Document:
         self.long_id_line.LEN = total_records
 
         return self
+
+    def save_to_file(self, filename: str, encoding='cp850', normalize_text=True):
+        """
+        Guarda el documento en un archivo con formato SINLI correcto
+
+        Args:
+            filename: Ruta del archivo de destino
+            encoding: Encoding a usar (por defecto cp850 como recomienda SINLI)
+            normalize_text: Si True, normaliza el texto antes de guardar
+        """
+        content = str(self)
+
+        if normalize_text:
+            content = self.normalize_sinli_text(content)
+
+        try:
+            with open(filename, 'w', encoding=encoding, newline='') as f:
+                f.write(content)
+            print(f"[INFO] Archivo guardado correctamente en {filename} con encoding {encoding}")
+        except UnicodeEncodeError as e:
+            print(f"[ERROR] Error de encoding al guardar: {e}")
+            # Fallback a windows-1252
+            try:
+                with open(filename, 'w', encoding='windows-1252', newline='') as f:
+                    f.write(content)
+                print(f"[INFO] Archivo guardado con encoding fallback windows-1252")
+            except Exception as e2:
+                raise ValueError(f"No se pudo guardar el archivo: {e2}")

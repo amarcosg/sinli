@@ -1,4 +1,4 @@
-from .common.encoded_values import SinliCode as c, BasicType as t, EncodedField
+from .common.encoded_values import BasicType as t, EncodedField
 from enum import Enum
 from typing_extensions import Self
 from dataclasses import dataclass
@@ -32,31 +32,88 @@ class Line:
 
             setattr(self, field.name, defval)
 
-
     def __str__(self) -> str:
-        """Export to SINLI string"""
+        """Export to SINLI string with EXACT positioning and proper character handling"""
 
-        field_l = []
+        # Calcular longitud total necesaria
+        max_pos = 0
         for field in self.Field:
-            deflen = field.value[1]
+            end_pos = field.value[0] + field.value[1]
+            max_pos = max(max_pos, end_pos)
+
+        # Crear buffer con espacios normales (ASCII 32)
+        line = [' '] * max_pos
+
+        # Colocar cada campo en su posición EXACTA
+        for field in self.Field:
+            start_pos = field.value[0]
+            field_len = field.value[1]
             f_type = field.value[2]
-            val = self.encode(deflen, getattr(self, field.name), f_type)
-            vallen = len(val)
 
-            if vallen < deflen:
+            # Obtener valor y normalizarlo para SINLI
+            raw_val = getattr(self, field.name)
+            val = self.encode(field_len, raw_val, f_type)
+
+            # Normalizar caracteres especiales en strings
+            if f_type == t.STR and isinstance(raw_val, str):
+                val = self.normalize_sinli_field_text(val)
+
+            # Ajustar longitud
+            if len(val) < field_len:
                 if f_type in [t.INT, t.FLOAT]:
-                    padding = "0" # pad left with zeroes
-                    val = "".join([padding for i in range(0, deflen-vallen)]) + val
+                    val = val.zfill(field_len)  # Pad con ceros a izquierda
                 else:
-                    padding = " " # pad right with spaces
-                    val = val + "".join([padding for i in range(0, deflen-vallen)])
-            elif vallen > deflen: # truncate
-                print(f"[WARN] Unexpected: field {field.name}={val} shouldn't have been longer than {deflen} chars. Truncating to {val[0:deflen]}")
-                val = val[0:deflen]
+                    val = val.ljust(field_len)  # Pad con espacios a derecha
+            elif len(val) > field_len:
+                val = val[:field_len]  # Truncar
 
-            field_l.append(val)
+            # COLOCAR EN POSICIÓN EXACTA con caracteres ASCII seguros
+            for i, char in enumerate(val):
+                if start_pos + i < len(line):
+                    line[start_pos + i] = char
 
-        return "".join(field_l)
+        return ''.join(line).rstrip()
+
+    @staticmethod
+    def normalize_sinli_field_text(text: str) -> str:
+        """
+        Normaliza texto específicamente para campos SINLI
+        """
+        if not text:
+            return text
+
+        # Importar función de normalización del documento
+        try:
+            from .document import Document
+            return Document.normalize_sinli_text(text)
+        except ImportError:
+            # Fallback básico si no se puede importar
+            import unicodedata
+
+            # Reemplazar espacios no estándar
+            text = text.replace('\u00A0', ' ')  # Non-breaking space
+            text = text.replace('\u2009', ' ')  # Thin space
+            text = text.replace('\u200A', ' ')  # Hair space
+
+            # Mapeo básico de caracteres especiales
+            replacements = {
+                'ñ': 'n', 'Ñ': 'N',
+                'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u',
+                'Á': 'A', 'É': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U',
+                '¡': '!', '¿': '?'
+            }
+
+            for old, new in replacements.items():
+                text = text.replace(old, new)
+
+            # Normalizar unicode
+            text = unicodedata.normalize('NFD', text)
+            text = ''.join(c for c in text if unicodedata.category(c) != 'Mn')
+
+            # Asegurar ASCII
+            text = ''.join(c if ord(c) < 128 and (c.isprintable() or c == ' ') else '?' for c in text)
+
+            return text
 
     def to_csv(self) -> str:
         return ", ".join(vars(self).values())
@@ -93,13 +150,17 @@ class Line:
             end = start + field.value[1]
             vtype = field.value[2]
             try:
-                line_dict[field.name] = cls.decode(vtype, line_s[start:end].strip())
+                field_value = line_s[start:end].strip()
+                line_dict[field.name] = cls.decode(vtype, field_value)
             except ValueError as err:
                 print(f"[ERROR] Decode error. {field} with value \"{line_s[start:end]}\" can't be converted to a float or int.", err)
                 line_dict[field.name] = 0
             except NameError as err:
                 print(f"[ERROR] Decode error. {field} with value \"{line_s[start:end]}\" can't be converted to a language, currency or country.", err)
                 line_dict[field.name] = None
+            except IndexError as err:
+                print(f"[ERROR] Index error. Line too short for field {field}. Line length: {len(line_s)}, expected position: {end}")
+                line_dict[field.name] = "" if vtype == t.STR else 0
 
             print(f"[DEBUG] {field} → {line_dict[field.name]}")
         line = cls()
