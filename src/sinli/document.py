@@ -47,18 +47,18 @@ class Document:
         - Remueve acentos y diacríticos
         - Convierte caracteres especiales del español
         - Reemplaza espacios no estándar por espacios normales
-        - Maneja caracteres especiales comunes
+        - Elimina cualquier carácter no compatible con cp850
         """
         if not text:
             return text
 
-        # Reemplazar espacios no estándar (ASCII 160) por espacios normales (ASCII 32)
+        # Reemplazar espacios no estándar
         text = text.replace('\u00A0', ' ')  # Non-breaking space
         text = text.replace('\u2009', ' ')  # Thin space
         text = text.replace('\u200A', ' ')  # Hair space
         text = text.replace('\u202F', ' ')  # Narrow no-break space
 
-        # Mapeo manual de caracteres especiales comunes en español
+        # Mapeo manual de caracteres especiales comunes
         replacements = {
             'ñ': 'n', 'Ñ': 'N',
             'ç': 'c', 'Ç': 'C',
@@ -68,7 +68,28 @@ class Document:
             'Á': 'A', 'É': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U',
             'ü': 'u', 'Ü': 'U',
             'à': 'a', 'è': 'e', 'ì': 'i', 'ò': 'o', 'ù': 'u',
-            'À': 'A', 'È': 'E', 'Ì': 'I', 'Ò': 'O', 'Ù': 'U'
+            'À': 'A', 'È': 'E', 'Ì': 'I', 'Ò': 'O', 'Ù': 'U',
+            # Comillas tipográficas y otros símbolos comunes
+            ''': "'", ''': "'", '"': '"', '"': '"',
+            '–': '-', '—': '-',  # En dash y em dash
+            '…': '...',  # Ellipsis
+            '€': 'EUR',  # Euro symbol
+            '•': '*',  # Bullet
+            '°': 'o',  # Degree symbol
+            '×': 'x',  # Multiplication sign
+            '÷': '/',  # Division sign
+            '®': '(R)',  # Registered trademark
+            '©': '(C)',  # Copyright
+            '™': '(TM)',  # Trademark
+            '±': '+/-',  # Plus-minus
+            '≤': '<=',  # Less than or equal
+            '≥': '>=',  # Greater than or equal
+            '≠': '!=',  # Not equal
+            '½': '1/2',  # Fractions
+            '¼': '1/4',
+            '¾': '3/4',
+            '⅓': '1/3',
+            '⅔': '2/3',
         }
 
         for old, new in replacements.items():
@@ -78,7 +99,25 @@ class Document:
         text = unicodedata.normalize('NFD', text)
         text = ''.join(c for c in text if unicodedata.category(c) != 'Mn')
 
-        return text
+        # Verificar compatibilidad con cp850
+        result = []
+        for char in text:
+            try:
+                # Intentar codificar el carácter en cp850
+                char.encode('cp850')
+                result.append(char)
+            except UnicodeEncodeError:
+                # Si no se puede codificar, usar un reemplazo seguro
+                if char.isspace():
+                    result.append(' ')
+                elif ord(char) < 32:  # Caracteres de control
+                    result.append(' ')
+                else:
+                    # Para otros caracteres no compatibles, omitir o reemplazar con '?'
+                    # Puedes cambiar esto a result.append('?') si prefieres reemplazar
+                    pass  # Omitir el carácter
+
+        return ''.join(result)
 
     @classmethod
     def consume_line(cls, line: str, doc: Self) -> Self:

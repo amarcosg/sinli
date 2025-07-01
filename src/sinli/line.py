@@ -82,25 +82,29 @@ class Line:
         if not text:
             return text
 
-        # Importar función de normalización del documento
+        # Importar función de normalización del documento si es posible
         try:
             from .document import Document
             return Document.normalize_sinli_text(text)
         except ImportError:
-            # Fallback básico si no se puede importar
+            # Fallback si no se puede importar
             import unicodedata
 
             # Reemplazar espacios no estándar
             text = text.replace('\u00A0', ' ')  # Non-breaking space
             text = text.replace('\u2009', ' ')  # Thin space
             text = text.replace('\u200A', ' ')  # Hair space
+            text = text.replace('\u202F', ' ')  # Narrow no-break space
 
             # Mapeo básico de caracteres especiales
             replacements = {
                 'ñ': 'n', 'Ñ': 'N',
                 'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u',
                 'Á': 'A', 'É': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U',
-                '¡': '!', '¿': '?'
+                '¡': '!', '¿': '?',
+                ''': "'", ''': "'", '"': '"', '"': '"',
+                '–': '-', '—': '-',
+                '€': 'EUR',
             }
 
             for old, new in replacements.items():
@@ -110,10 +114,18 @@ class Line:
             text = unicodedata.normalize('NFD', text)
             text = ''.join(c for c in text if unicodedata.category(c) != 'Mn')
 
-            # Asegurar ASCII
-            text = ''.join(c if ord(c) < 128 and (c.isprintable() or c == ' ') else '?' for c in text)
+            # Asegurar compatibilidad con cp850
+            result = []
+            for char in text:
+                try:
+                    char.encode('cp850')
+                    result.append(char)
+                except UnicodeEncodeError:
+                    if char.isspace():
+                        result.append(' ')
+                    # Omitir otros caracteres no compatibles
 
-            return text
+            return ''.join(result)
 
     def to_csv(self) -> str:
         return ", ".join(vars(self).values())
